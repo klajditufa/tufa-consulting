@@ -142,9 +142,20 @@ function Services({ lang, go }){
 function Publications({ lang, go }){
   const T = window.TUFA;
   const [cat, setCat] = useState("all");
+  const [query, setQuery] = useState("");
   const catName = (id)=>{ const c=T.pubs.cats.find(c=>c.id===id); return c?tx(c,lang):id; };
-  const list = cat==="all" ? T.pubs.items : T.pubs.items.filter(p=>p.cat===cat);
-  const feat = T.pubs.items[0];
+  const all = T.pubs.items;
+  const q = query.trim().toLowerCase();
+
+  const base = cat==="all" ? all : all.filter(p=>p.cat===cat);
+  const list = q ? base.filter(p=>{
+    const hay = (tx(p.t,lang)+" "+tx(p.x,lang)+" "+catName(p.cat)).toLowerCase();
+    return hay.includes(q);
+  }) : base;
+
+  const showFeatured = !q && cat==="all";
+  const feat = all[0];
+  const gridList = showFeatured ? list.slice(1) : list;
 
   return (
     <main className="page-enter">
@@ -154,14 +165,17 @@ function Publications({ lang, go }){
         lead={tx(T.pubs.lead,lang)}/>
 
       {/* featured */}
+      {showFeatured && feat && (
       <section className="pub-feat-sec">
         <div className="wrap">
           <Reveal>
             <div className="pub-feat">
               <div className="ph-slot pub-feat-img" style={{aspectRatio:"16 / 9"}}>
-                <image-slot id="pub-featured" shape="rounded" radius="3"
-                  placeholder={lang==="sq"?"Tërhiqni një foto":"Drop a photo"}
-                  style={{width:"100%",height:"100%",display:"block"}}></image-slot>
+                {feat.img
+                  ? <img src={feat.img} alt={tx(feat.t,lang)} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",borderRadius:"3px"}}/>
+                  : <image-slot id="pub-featured" shape="rounded" radius="3"
+                      placeholder={lang==="sq"?"Tërhiqni një foto":"Drop a photo"}
+                      style={{width:"100%",height:"100%",display:"block"}}></image-slot>}
               </div>
               <div className="pub-feat-body pub-feat-click" onClick={()=>go("article",0)} role="link" tabIndex="0">
                 <div className="pub-tags">
@@ -176,31 +190,60 @@ function Publications({ lang, go }){
           </Reveal>
         </div>
       </section>
+      )}
 
-      {/* filter + grid */}
+      {/* filter + search + grid */}
       <section className="section pub-grid-sec">
         <div className="wrap">
-          <div className="pub-filter">
-            <button className={"chip"+(cat==="all"?" on":"")} onClick={()=>setCat("all")}>{tx(T.ui.filter_all,lang)}</button>
-            {T.pubs.cats.map(c=>(
-              <button key={c.id} className={"chip"+(cat===c.id?" on":"")} onClick={()=>setCat(c.id)}>{tx(c,lang)}</button>
-            ))}
+          <div className="pub-toolbar">
+            <div className="pub-filter">
+              <button className={"chip"+(cat==="all"?" on":"")} onClick={()=>setCat("all")}>{tx(T.ui.filter_all,lang)}</button>
+              {T.pubs.cats.map(c=>(
+                <button key={c.id} className={"chip"+(cat===c.id?" on":"")} onClick={()=>setCat(c.id)}>{tx(c,lang)}</button>
+              ))}
+            </div>
+            <div className="pub-search">
+              <svg className="pub-search-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2"/>
+                <path d="M16.5 16.5L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              <input type="text" value={query} onChange={(e)=>setQuery(e.target.value)}
+                placeholder={lang==="sq"?"Kërko publikime…":"Search publications…"}/>
+              {query && (
+                <button className="pub-search-clear" onClick={()=>setQuery("")} aria-label={lang==="sq"?"Pastro":"Clear"}>×</button>
+              )}
+            </div>
           </div>
-          <div className="pub-grid">
-            {list.map((p,i)=>(
-              <Reveal key={p.t.sq} delay={(i%3)*60}>
-                <a href="#" className="pubcard" onClick={(e)=>{e.preventDefault(); go("article", T.pubs.items.indexOf(p));}}>
-                  <div className="pubcard-top">
-                    <span className="pub-cat-tag">{catName(p.cat)}</span>
-                    <span className="pubcard-arr"><Arrow/></span>
-                  </div>
-                  <h3 className="pubcard-t">{tx(p.t,lang)}</h3>
-                  <p className="pubcard-x">{tx(p.x,lang)}</p>
-                  <div className="pubcard-meta">{tx(p.date,lang)} · {p.read} min</div>
-                </a>
-              </Reveal>
-            ))}
-          </div>
+
+          {gridList.length>0 ? (
+            <div className="pub-grid">
+              {gridList.map((p,i)=>(
+                <Reveal key={p.id||i} delay={(i%3)*60}>
+                  <a href="#" className="pubcard" onClick={(e)=>{e.preventDefault(); go("article", all.indexOf(p));}}>
+                    {p.img && (
+                      <div className="pubcard-img" style={{aspectRatio:"16 / 10"}}>
+                        <img src={p.img} alt={tx(p.t,lang)}/>
+                      </div>
+                    )}
+                    <div className="pubcard-top">
+                      <span className="pub-cat-tag">{catName(p.cat)}</span>
+                      <span className="pubcard-arr"><Arrow/></span>
+                    </div>
+                    <h3 className="pubcard-t">{tx(p.t,lang)}</h3>
+                    <p className="pubcard-x">{tx(p.x,lang)}</p>
+                    <div className="pubcard-meta">{tx(p.date,lang)} · {p.read} min</div>
+                  </a>
+                </Reveal>
+              ))}
+            </div>
+          ) : (
+            <div className="pub-empty">
+              <p>{lang==="sq"?"Asnjë publikim nuk u gjet për kërkimin tuaj.":"No publications found for your search."}</p>
+              <button className="tlink" onClick={()=>{setQuery(""); setCat("all");}}>
+                {lang==="sq"?"Shfaq të gjitha":"Show all"} <Arrow/>
+              </button>
+            </div>
+          )}
         </div>
       </section>
       <CtaBand lang={lang} go={go}/>

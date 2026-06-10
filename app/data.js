@@ -210,26 +210,8 @@ window.TUFA = {
       { id: "raportim",     sq: "Raportim",     en: "Reporting" },
       { id: "legjislacion", sq: "Legjislacion", en: "Legislation" },
     ],
-    items: [
-      { cat: "fiskale", date: { sq: "Mars 2026", en: "March 2026" }, read: "6",
-        t: { sq: "Ndryshimet e reja në ligjin për TVSH-në: çfarë duhet të dini", en: "New VAT law changes: what you need to know" },
-        x: { sq: "Një përmbledhje e ndryshimeve më të fundit dhe ndikimi i tyre te bizneset e vogla e të mesme.", en: "A summary of the latest changes and their impact on small and medium businesses." } },
-      { cat: "kontabilitet", date: { sq: "Shkurt 2026", en: "February 2026" }, read: "5",
-        t: { sq: "Si të përgatisni bilancin vjetor pa stres", en: "How to prepare your annual balance sheet without stress" },
-        x: { sq: "Një listë praktike kontrolli për mbylljen e qetë të vitit financiar.", en: "A practical checklist for a calm financial year-end close." } },
-      { cat: "fiskale", date: { sq: "Janar 2026", en: "January 2026" }, read: "4",
-        t: { sq: "Dixhitalizimi i faturës fiskale: udhëzues praktik", en: "Fiscal invoice digitalization: a practical guide" },
-        x: { sq: "Hapat për t'u përshtatur me sistemin e faturimit elektronik pa ndërprerje.", en: "Steps to adopt electronic invoicing without disruption." } },
-      { cat: "raportim", date: { sq: "Dhjetor 2025", en: "December 2025" }, read: "7",
-        t: { sq: "Treguesit financiarë që çdo biznes i vogël duhet të ndjekë", en: "Financial indicators every small business should track" },
-        x: { sq: "Nga likuiditeti te marzhi — metrikat që tregojnë shëndetin e biznesit.", en: "From liquidity to margin — the metrics that show business health." } },
-      { cat: "legjislacion", date: { sq: "Nëntor 2025", en: "November 2025" }, read: "5",
-        t: { sq: "Detyrimet tatimore për bizneset e reja", en: "Tax obligations for new businesses" },
-        x: { sq: "Çfarë duhet të regjistroni dhe deklaroni gjatë vitit të parë të aktivitetit.", en: "What to register and declare during your first year of activity." } },
-      { cat: "kontabilitet", date: { sq: "Tetor 2025", en: "October 2025" }, read: "6",
-        t: { sq: "Kontabiliteti i kostos: bazat për prodhuesit", en: "Cost accounting: the basics for manufacturers" },
-        x: { sq: "Si të llogarisni koston reale të produktit dhe të çmoni me besim.", en: "How to compute true product cost and price with confidence." } },
-    ]
+    /* items popullohen nga app/pubs-data.js (gjenerohet nga admin.html) */
+    items: []
   },
 
   contact: {

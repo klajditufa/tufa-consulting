@@ -5,7 +5,7 @@ function Article({ lang, go, arg }){
   const items = T.pubs.items;
   const idx = (typeof arg === "number" && arg >= 0 && arg < items.length) ? arg : 0;
   const p = items[idx];
-  const A = (window.TUFA_ARTICLES || [])[idx] || { sections: [] };
+  const A = p.body || { sections: [] };
   const catName = (id)=>{ const c=T.pubs.cats.find(c=>c.id===id); return c?tx(c,lang):id; };
   const prev = idx > 0 ? idx - 1 : null;
   const next = idx < items.length - 1 ? idx + 1 : null;
@@ -27,9 +27,11 @@ function Article({ lang, go, arg }){
 
         <div className="wrap">
           <div className="ph-slot art-hero-img" style={{aspectRatio:"16 / 9"}}>
-            <image-slot id={"pub-img-"+idx} shape="rounded" radius="4"
-              placeholder={lang==="sq"?"Tërhiqni një foto për këtë artikull":"Drop a photo for this article"}
-              style={{width:"100%",height:"100%",display:"block"}}></image-slot>
+            {p.img
+              ? <img src={p.img} alt={tx(p.t,lang)} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",borderRadius:"4px"}}/>
+              : <image-slot id={"pub-img-"+idx} shape="rounded" radius="4"
+                  placeholder={lang==="sq"?"Tërhiqni një foto për këtë artikull":"Drop a photo for this article"}
+                  style={{width:"100%",height:"100%",display:"block"}}></image-slot>}
           </div>
         </div>
 
