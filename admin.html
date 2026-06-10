@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>TUFA — Paneli i Publikimeve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#f4f1ec; --paper:#fbfaf7; --ink:#1d1d1d; --charcoal:#363636;
+    --muted:#6b675f; --muted-2:#928d83; --line:#e2ddd3; --orange:#ff9d3b;
+    --orange-deep:#d97a1a; --sans:"Hanken Grotesk",sans-serif; --serif:"Newsreader",serif;
+    --mono:"Spline Sans Mono",monospace; --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  input,textarea,select{font-family:inherit;font-size:15px;color:var(--ink);width:100%;
+    padding:11px 13px;border:1px solid var(--line);border-radius:3px;background:var(--paper);transition:border-color .2s}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--charcoal);box-shadow:0 0 0 3px rgba(54,54,54,.06)}
+  textarea{resize:vertical;line-height:1.55}
+  label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+  .field{margin-bottom:20px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:12px 20px;border-radius:3px;transition:.2s var(--ease)}
+  .btn-primary{background:var(--charcoal);color:#fff}
+  .btn-primary:hover{background:#1d1d1d}
+  .btn-orange{background:var(--orange);color:#1d1d1d}
+  .btn-orange:hover{background:var(--orange-deep);color:#fff}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink);background:var(--paper)}
+  .btn-ghost:hover{border-color:var(--charcoal)}
+  .btn-sm{font-size:12.5px;padding:7px 12px}
+  /* header */
+  header{background:var(--charcoal);color:#fff;padding:18px 0}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .logo{font-family:var(--serif);font-size:21px;font-weight:500}
+  .logo b{font-weight:600}
+  .logo .tag{font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:var(--orange);text-transform:uppercase;display:block;margin-top:2px}
+  .hbtns{display:flex;gap:10px}
+  .hbtns .btn-ghost{background:transparent;color:#fff;border-color:#555}
+  .hbtns .btn-ghost:hover{border-color:#fff}
+  /* gate */
+  .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .gate-card{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:44px 40px;max-width:380px;width:100%;text-align:center}
+  .gate-card h1{font-family:var(--serif);font-size:26px;font-weight:500;margin-bottom:8px}
+  .gate-card p{color:var(--muted);margin-bottom:24px;font-size:14px}
+  .gate-err{color:#c0492b;font-size:13px;margin-top:12px;min-height:18px}
+  /* main */
+  main{padding:36px 0 80px}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+  .bar h2{font-family:var(--serif);font-size:27px;font-weight:500}
+  .count{font-family:var(--mono);font-size:12px;color:var(--muted-2)}
+  /* list */
+  .plist{display:flex;flex-direction:column;gap:10px}
+  .pitem{display:flex;align-items:center;gap:14px;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+  .pitem-thumb{width:62px;height:46px;border-radius:3px;background:var(--line);object-fit:cover;flex-shrink:0}
+  .pitem-thumb.empty{display:flex;align-items:center;justify-content:center;color:var(--muted-2);font-size:18px}
+  .pitem-body{flex:1;min-width:0}
+  .pitem-cat{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange-deep)}
+  .pitem-t{font-family:var(--serif);font-size:17px;line-height:1.25;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pitem-meta{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:3px}
+  .pitem-acts{display:flex;align-items:center;gap:4px;flex-shrink:0}
+  .iconbtn{width:32px;height:32px;border-radius:3px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:.15s}
+  .iconbtn:hover{background:var(--bg);color:var(--ink)}
+  .iconbtn.danger:hover{background:#fbeae5;color:#c0492b}
+  .iconbtn:disabled{opacity:.25;cursor:default}
+  /* form */
+  .formcard{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:30px 30px 34px}
+  .formcard h3{font-family:var(--serif);font-size:22px;font-weight:500;margin-bottom:24px}
+  .sec{border-top:1px solid var(--line);padding-top:22px;margin-top:6px}
+  .sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .sec-h .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .bsec{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:16px;margin-bottom:12px;position:relative}
+  .bsec .rm{position:absolute;top:10px;right:10px}
+  .photo-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .photo-prev{width:140px;height:90px;border-radius:4px;object-fit:cover;border:1px solid var(--line);background:var(--line)}
+  .hint{font-size:12.5px;color:var(--muted-2);margin-top:6px;line-height:1.5}
+  .formfoot{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+  /* modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(29,29,29,.5);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}
+  .modal{background:var(--paper);border-radius:6px;padding:32px;max-width:560px;width:100%}
+  .modal h3{font-family:var(--serif);font-size:21px;font-weight:500;margin-bottom:10px}
+  .modal p{color:var(--muted);font-size:14px;margin-bottom:18px;line-height:1.6}
+  .modal code{font-family:var(--mono);font-size:12.5px;background:var(--bg);padding:2px 6px;border-radius:3px}
+  .modal ol{margin:0 0 18px 20px;font-size:14px;line-height:1.9}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--charcoal);color:#fff;
+    padding:13px 22px;border-radius:4px;font-size:14px;z-index:60;box-shadow:0 12px 30px -10px rgba(0,0,0,.4)}
+  @media(max-width:600px){ .row{grid-template-columns:1fr} .formcard{padding:22px 18px 26px} }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- ngarko të dhënat ekzistuese -->
+<script src="app/data.js"></script>
+<script src="app/pubs-data.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef } = React;
+
+/* ====== konfigurim ====== */
+const PASSWORD = "tufa2026";          // <-- ndryshoje këtu fjalëkalimin
+const LS_KEY = "tufa_admin_pubs_v1";
+const MONTHS = ["Janar","Shkurt","Mars","Prill","Maj","Qershor","Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor"];
+const CATS = (window.TUFA && window.TUFA.pubs && window.TUFA.pubs.cats) || [
+  {id:"fiskale",sq:"Fiskale"},{id:"kontabilitet",sq:"Kontabilitet"},
+  {id:"raportim",sq:"Raportim"},{id:"legjislacion",sq:"Legjislacion"}
+];
+const SEED = (window.TUFA_PUBS || []).map(clone);
+
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function todayAl(){ const d=new Date(); return d.getDate()+" "+MONTHS[d.getMonth()]+" "+d.getFullYear(); }
+function slugify(s){ return (s||"").toLowerCase()
+  .replace(/[ëé]/g,"e").replace(/[ç]/g,"c").replace(/[^a-z0-9\s-]/g,"")
+  .trim().replace(/\s+/g,"-").slice(0,60) || ("pub-"+Date.now()); }
+function emptyPub(){ return { id:"", cat:CATS[0].id, date:todayAl(), read:5, img:"",
+  t:"", x:"", body:{ lede:"", sections:[{h:"",p:""}], close:"" } }; }
+
+/* ====== ngjesh foton në data URL ====== */
+function compressImage(file, cb){
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const max = 1200;
+      let {width:w, height:h} = img;
+      if(w>max){ h = Math.round(h*max/w); w = max; }
+      const c = document.createElement("canvas");
+      c.width=w; c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      let out;
+      try{ out = c.toDataURL("image/webp",0.7); }catch(_){ out = c.toDataURL("image/jpeg",0.75); }
+      if(out.length > 600000){ out = c.toDataURL("image/jpeg",0.62); }
+      cb(out);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ====== gjenero përmbajtjen e skedarit ====== */
+function buildFile(pubs){
+  const clean = pubs.map(p=>({
+    id: p.id || slugify(p.t),
+    cat: p.cat, date: p.date, read: Number(p.read)||5, img: p.img||"",
+    t: p.t.trim(), x: p.x.trim(),
+    body: {
+      lede: (p.body.lede||"").trim(),
+      sections: (p.body.sections||[]).filter(s=>(s.h||"").trim()||(s.p||"").trim())
+        .map(s=>({h:(s.h||"").trim(), p:(s.p||"").trim()})),
+      close: (p.body.close||"").trim()
+    }
+  }));
+  return "/* ====================================================================\n"
+    + "   TUFA Consult — Publikimet\n"
+    + "   Gjeneruar nga admin.html më " + todayAl() + "\n"
+    + "   Publikimi i parë në listë shfaqet i pari (më i fundit) në faqe.\n"
+    + "   ==================================================================== */\n"
+    + "window.TUFA_PUBS = " + JSON.stringify(clean, null, 2) + ";\n\n"
+    + "if (window.TUFA && window.TUFA.pubs) {\n"
+    + "  window.TUFA.pubs.items = window.TUFA_PUBS;\n"
+    + "}\n";
+}
+
+/* ===================== APP ===================== */
+function App(){
+  const [authed, setAuthed] = useState(sessionStorage.getItem("tufa_admin_ok")==="1");
+  const [pubs, setPubs] = useState(()=>{
+    const saved = localStorage.getItem(LS_KEY);
+    if(saved){ try{ return JSON.parse(saved); }catch(_){} }
+    return clone(SEED);
+  });
+  const [editing, setEditing] = useState(null); // null=list, -1=new, n=index
+  const [draft, setDraft] = useState(null);
+  const [modal, setModal] = useState(false);
+  const [toast, setToast] = useState("");
+
+  useEffect(()=>{ localStorage.setItem(LS_KEY, JSON.stringify(pubs)); },[pubs]);
+  useEffect(()=>{ if(toast){ const t=setTimeout(()=>setToast(""),2600); return ()=>clearTimeout(t); } },[toast]);
+
+  if(!authed) return <Gate onOk={()=>{ sessionStorage.setItem("tufa_admin_ok","1"); setAuthed(true); }}/>;
+
+  const startNew = ()=>{ setDraft(emptyPub()); setEditing(-1); };
+  const startEdit = (i)=>{ setDraft(clone(pubs[i])); setEditing(i); };
+  const cancel = ()=>{ setEditing(null); setDraft(null); window.scrollTo(0,0); };
+  const save = ()=>{
+    if(!draft.t.trim()){ setToast("Shkruani titullin"); return; }
+    const d = clone(draft); if(!d.id) d.id = slugify(d.t);
+    if(editing===-1){ setPubs([d, ...pubs]); setToast("Publikimi u shtua në krye"); }
+    else { const cp=[...pubs]; cp[editing]=d; setPubs(cp); setToast("Publikimi u ruajt"); }
+    setEditing(null); setDraft(null); window.scrollTo(0,0);
+  };
+  const del = (i)=>{ if(confirm("Të fshihet ky publikim?")){ setPubs(pubs.filter((_,j)=>j!==i)); } };
+  const move = (i,dir)=>{ const j=i+dir; if(j<0||j>=pubs.length) return;
+    const cp=[...pubs]; [cp[i],cp[j]]=[cp[j],cp[i]]; setPubs(cp); };
+  const download = ()=>{
+    const blob = new Blob([buildFile(pubs)], {type:"text/javascript"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "pubs-data.js";
+    document.body.appendChild(a); a.click(); a.remove();
+    setModal(true);
+  };
+  const resetSeed = ()=>{ if(confirm("Të rikthehen publikimet siç janë në faqe tani? Ndryshimet e paruajtura humbasin.")){
+    setPubs(clone(SEED)); setToast("U rikthye nga faqja"); } };
+
+  return (
+    <>
+      <header><div className="wrap">
+        <div className="logo"><b>TUFA</b> Consult<span className="tag">Paneli i publikimeve</span></div>
+        <div className="hbtns">
+          <a className="btn btn-ghost btn-sm" href="index.html" target="_blank" rel="noopener">Shiko faqen ↗</a>
+        </div>
+      </div></header>
+
+      <main><div className="wrap">
+        {editing===null ? (
+          <>
+            <div className="bar">
+              <div><h2>Publikimet</h2><span className="count">{pubs.length} publikime · i pari = më i fundit</span></div>
+              <button className="btn btn-orange" onClick={startNew}>+ Shto publikim</button>
+            </div>
+            <div className="plist">
+              {pubs.map((p,i)=>(
+                <div className="pitem" key={p.id||i}>
+                  {p.img ? <img className="pitem-thumb" src={p.img} alt=""/> : <div className="pitem-thumb empty">▦</div>}
+                  <div className="pitem-body">
+                    <div className="pitem-cat">{(CATS.find(c=>c.id===p.cat)||{}).sq||p.cat}</div>
+                    <div className="pitem-t">{p.t||"(pa titull)"}</div>
+                    <div className="pitem-meta">{p.date} · {p.read} min</div>
+                  </div>
+                  <div className="pitem-acts">
+                    <button className="iconbtn" title="Lart" disabled={i===0} onClick={()=>move(i,-1)}>↑</button>
+                    <button className="iconbtn" title="Poshtë" disabled={i===pubs.length-1} onClick={()=>move(i,1)}>↓</button>
+                    <button className="iconbtn" title="Ndrysho" onClick={()=>startEdit(i)}>✎</button>
+                    <button className="iconbtn danger" title="Fshi" onClick={()=>del(i)}>🗑</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="formfoot" style={{marginTop:32}}>
+              <button className="btn btn-primary" onClick={download}>⬇ Gjenero skedarin për GitHub</button>
+              <button className="btn btn-ghost" onClick={resetSeed}>Rikthe nga faqja</button>
+            </div>
+          </>
+        ) : (
+          <Editor draft={draft} setDraft={setDraft} onSave={save} onCancel={cancel} isNew={editing===-1}/>
+        )}
+      </div></main>
+
+      {modal && <DownloadModal onClose={()=>setModal(false)}/>}
+      {toast && <div className="toast">{toast}</div>}
+    </>
+  );
+}
+
+/* ===================== GATE ===================== */
+function Gate({ onOk }){
+  const [val,setVal]=useState(""); const [err,setErr]=useState("");
+  const go = ()=>{ if(val===PASSWORD) onOk(); else setErr("Fjalëkalim i gabuar."); };
+  return (
+    <div className="gate"><div className="gate-card">
+      <h1>Paneli i Publikimeve</h1>
+      <p>Vetëm për administratorin e TUFA Consult.</p>
+      <input type="password" value={val} placeholder="Fjalëkalimi"
+        onChange={e=>setVal(e.target.value)} onKeyDown={e=>e.key==="Enter"&&go()} autoFocus/>
+      <div className="gate-err">{err}</div>
+      <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={go}>Hyr</button>
+    </div></div>
+  );
+}
+
+/* ===================== EDITOR ===================== */
+function Editor({ draft, setDraft, onSave, onCancel, isNew }){
+  const fileRef = useRef();
+  const set = (k,v)=> setDraft({...draft, [k]:v});
+  const setBody = (k,v)=> setDraft({...draft, body:{...draft.body, [k]:v}});
+  const setSec = (i,k,v)=>{ const s=[...draft.body.sections]; s[i]={...s[i],[k]:v}; setBody("sections",s); };
+  const addSec = ()=> setBody("sections",[...draft.body.sections,{h:"",p:""}]);
+  const rmSec = (i)=> setBody("sections", draft.body.sections.filter((_,j)=>j!==i));
+
+  const onPhoto = (e)=>{ const f=e.target.files[0]; if(f) compressImage(f, url=>set("img",url)); };
+
+  return (
+    <div className="formcard">
+      <h3>{isNew?"Publikim i ri":"Ndrysho publikimin"}</h3>
+
+      <div className="field">
+        <label>Titulli</label>
+        <input value={draft.t} onChange={e=>set("t",e.target.value)} placeholder="P.sh. Ndryshimet e reja në TVSH 2026"/>
+      </div>
+
+      <div className="row">
+        <div className="field">
+          <label>Kategoria</label>
+          <select value={draft.cat} onChange={e=>set("cat",e.target.value)}>
+            {CATS.map(c=><option key={c.id} value={c.id}>{c.sq}</option>)}
+          </select>
+        </div>
+        <div className="row" style={{gridTemplateColumns:"1.4fr .8fr"}}>
+          <div className="field"><label>Data</label>
+            <input value={draft.date} onChange={e=>set("date",e.target.value)} placeholder="25 Maj 2026"/></div>
+          <div className="field"><label>Min. lexim</label>
+            <input type="number" min="1" value={draft.read} onChange={e=>set("read",e.target.value)}/></div>
+        </div>
+      </div>
+
+      <div className="field">
+        <label>Përshkrimi i shkurtër (shfaqet te karta)</label>
+        <textarea rows="2" value={draft.x} onChange={e=>set("x",e.target.value)}
+          placeholder="Një ose dy fjali që përmbledhin publikimin."></textarea>
+      </div>
+
+      <div className="field">
+        <label>Foto (opsionale)</label>
+        <div className="photo-wrap">
+          {draft.img && <img className="photo-prev" src={draft.img} alt=""/>}
+          <input ref={fileRef} type="file" accept="image/*" style={{display:"none"}} onChange={onPhoto}/>
+          <button className="btn btn-ghost btn-sm" onClick={()=>fileRef.current.click()}>
+            {draft.img?"Ndrysho foton":"Ngarko foto"}</button>
+          {draft.img && <button className="btn btn-ghost btn-sm" onClick={()=>set("img","")}>Hiq foton</button>}
+        </div>
+        <p className="hint">Foto ngjeshet automatikisht. Mund ta ngarkosh nga telefoni ose kompjuteri.</p>
+      </div>
+
+      <div className="sec">
+        <div className="sec-h"><span className="lbl">Teksti i artikullit</span></div>
+        <div className="field">
+          <label>Hyrja (paragrafi i parë)</label>
+          <textarea rows="3" value={draft.body.lede} onChange={e=>setBody("lede",e.target.value)}
+            placeholder="Paragrafi hyrës që prezanton temën."></textarea>
+        </div>
+
+        {draft.body.sections.map((s,i)=>(
+          <div className="bsec" key={i}>
+            {draft.body.sections.length>1 &&
+              <button className="iconbtn danger rm" title="Hiq seksionin" onClick={()=>rmSec(i)}>✕</button>}
+            <div className="field" style={{marginBottom:12}}>
+              <label>Nëntitull {i+1} (opsional)</label>
+              <input value={s.h} onChange={e=>setSec(i,"h",e.target.value)} placeholder="P.sh. Çfarë ndryshon"/>
+            </div>
+            <div className="field" style={{marginBottom:0}}>
+              <label>Paragrafi</label>
+              <textarea rows="3" value={s.p} onChange={e=>setSec(i,"p",e.target.value)}
+                placeholder="Teksti i këtij seksioni."></textarea>
+            </div>
+          </div>
+        ))}
+        <button className="btn btn-ghost btn-sm" onClick={addSec}>+ Shto seksion</button>
+
+        <div className="field" style={{marginTop:20,marginBottom:0}}>
+          <label>Mbyllja (paragrafi i fundit)</label>
+          <textarea rows="2" value={draft.body.close} onChange={e=>setBody("close",e.target.value)}
+            placeholder="Një ftesë për kontakt ose përfundim."></textarea>
+        </div>
+      </div>
+
+      <div className="formfoot">
+        <button className="btn btn-orange" onClick={onSave}>{isNew?"Shto publikimin":"Ruaj ndryshimet"}</button>
+        <button className="btn btn-ghost" onClick={onCancel}>Anulo</button>
+      </div>
+    </div>
+  );
+}
+
+/* ===================== MODAL ===================== */
+function DownloadModal({ onClose }){
+  return (
+    <div className="modal-bg" onClick={onClose}>
+      <div className="modal" onClick={e=>e.stopPropagation()}>
+        <h3>Skedari u shkarkua ✓</h3>
+        <p>U shkarkua <code>pubs-data.js</code>. Tani ngarkoje te GitHub që publikimet të dalin live:</p>
+        <ol>
+          <li>Hap repo-n te GitHub → dosjen <code>app</code></li>
+          <li>Kliko <b>Add file → Upload files</b></li>
+          <li>Tërhiq skedarin e ri <code>pubs-data.js</code> (zëvendëson të vjetrin)</li>
+          <li>Kliko <b>Commit changes</b></li>
+          <li>Prit ~1 minutë → rifresko <code>tufa.consulting</code></li>
+        </ol>
+        <button className="btn btn-primary" onClick={onClose}>Në rregull</button>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
