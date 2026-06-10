@@ -15,7 +15,7 @@ function BalanceCard({ lang }){
           <div className="bcard-ey">{lang==="sq"?"BILANCI":"BALANCE"} · 2025</div>
           <div className="bcard-ttl">{lang==="sq"?"Pasqyra Financiare":"Financial Statement"}</div>
         </div>
-        <div className="bcard-stamp">{lang==="sq"?"MBYLLUR":"CLOSED"}</div>
+        <div className="bcard-stamp">{lang==="sq"?"Shembull":"Sample"}</div>
       </div>
       <div className="bcard-rows">
         {rows.map((r,i)=>(
