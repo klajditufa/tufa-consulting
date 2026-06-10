@@ -286,6 +286,8 @@
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--charcoal);box-shadow:0 0 0 3px rgba(54,54,54,.07)}
 .field input.err,.field textarea.err{border-color:#c0492b;box-shadow:0 0 0 3px rgba(192,73,43,.08)}
 .cform-btn{align-self:flex-start;margin-top:6px}
+.cform-btn:disabled{opacity:.55;cursor:default}
+.cform-err-msg{margin-top:14px;font-size:14px;color:#c0492b;line-height:1.5}
 .form-sent{border:1px solid var(--line);border-radius:4px;padding:56px 40px;display:flex;flex-direction:column;align-items:flex-start;gap:20px;background:var(--paper)}
 .form-sent-ico{width:54px;height:54px;border-radius:50%;background:var(--orange);color:#1d1d1d;display:flex;align-items:center;justify-content:center}
 

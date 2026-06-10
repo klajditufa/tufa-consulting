@@ -215,16 +215,36 @@ function Contact({ lang, go }){
   const [form, setForm] = useState({ name:"", email:"", company:"", message:"" });
   const [errs, setErrs] = useState({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [failed, setFailed] = useState(false);
   const set = (k)=>(e)=> setForm(f=>({...f,[k]:e.target.value}));
 
-  const submit = (e)=>{
+  const submit = async (e)=>{
     e.preventDefault();
     const er = {};
     if(!form.name.trim()) er.name = true;
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) er.email = true;
     if(!form.message.trim()) er.message = true;
     setErrs(er);
-    if(Object.keys(er).length===0) setSent(true);
+    if(Object.keys(er).length!==0) return;
+    setFailed(false);
+    setSending(true);
+    try {
+      const res = await fetch("https://formspree.io/f/xaqzbdoo", {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: (()=>{ const fd=new FormData();
+          fd.append("Emri", form.name);
+          fd.append("email", form.email);
+          fd.append("Biznesi", form.company);
+          fd.append("Mesazhi", form.message);
+          fd.append("_subject", "Mesazh i ri nga tufa.consulting — "+form.name);
+          return fd; })()
+      });
+      if(res.ok){ setSent(true); }
+      else { setFailed(true); }
+    } catch(err){ setFailed(true); }
+    setSending(false);
   };
 
   return (
@@ -280,7 +300,12 @@ function Contact({ lang, go }){
                   <label>{tx(F.message,lang)}</label>
                   <textarea className={errs.message?"err":""} rows="4" value={form.message} onChange={set("message")} placeholder="—"></textarea>
                 </div>
-                <button type="submit" className="btn btn-primary cform-btn">{tx(F.send,lang)} <Arrow/></button>
+                <button type="submit" className="btn btn-primary cform-btn" disabled={sending}>
+                  {sending ? (lang==="sq"?"Po dërgohet…":"Sending…") : tx(F.send,lang)} <Arrow/>
+                </button>
+                {failed && (
+                  <p className="cform-err-msg">{lang==="sq"?"Mesazhi nuk u dërgua dot. Provoni sërish ose na shkruani direkt në email.":"Could not send. Please try again or email us directly."}</p>
+                )}
               </form>
             )}
           </Reveal>
