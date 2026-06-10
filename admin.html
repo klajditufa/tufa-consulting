@@ -109,6 +109,7 @@ const { useState, useEffect, useRef } = React;
 /* ====== konfigurim ====== */
 const PASSWORD = "tufa2026";          // <-- ndryshoje këtu fjalëkalimin
 const LS_KEY = "tufa_admin_pubs_v1";
+const PUB_KEY = "tufa_admin_published_v1";
 const MONTHS = ["Janar","Shkurt","Mars","Prill","Maj","Qershor","Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor"];
 const CATS = (window.TUFA && window.TUFA.pubs && window.TUFA.pubs.cats) || [
   {id:"fiskale",sq:"Fiskale"},{id:"kontabilitet",sq:"Kontabilitet"},
@@ -178,6 +179,11 @@ function App(){
     if(saved){ try{ return JSON.parse(saved); }catch(_){} }
     return clone(SEED);
   });
+  const [published, setPublished] = useState(()=>{
+    const sv = localStorage.getItem(PUB_KEY);
+    if(sv){ try{ return JSON.parse(sv); }catch(_){} }
+    return clone(SEED);
+  });
   const [editing, setEditing] = useState(null); // null=list, -1=new, n=index
   const [draft, setDraft] = useState(null);
   const [modal, setModal] = useState(false);
@@ -206,10 +212,12 @@ function App(){
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob); a.download = "pubs-data.js";
     document.body.appendChild(a); a.click(); a.remove();
+    localStorage.setItem(PUB_KEY, JSON.stringify(pubs));
+    setPublished(clone(pubs));
     setModal(true);
   };
-  const resetSeed = ()=>{ if(confirm("Të rikthehen publikimet siç janë në faqe tani? Ndryshimet e paruajtura humbasin.")){
-    setPubs(clone(SEED)); setToast("U rikthye nga faqja"); } };
+  const resetSeed = ()=>{ if(confirm("Të rikthehen publikimet te versioni i fundit që ke publikuar? Publikimet e reja që NUK i ke gjeneruar e ngarkuar do të humbasin — por ato të publikuara më parë MBETEN.")){
+    setPubs(clone(published)); setToast("U kthye te versioni i publikuar"); } };
 
   return (
     <>
@@ -247,7 +255,7 @@ function App(){
             </div>
             <div className="formfoot" style={{marginTop:32}}>
               <button className="btn btn-primary" onClick={download}>⬇ Gjenero skedarin për GitHub</button>
-              <button className="btn btn-ghost" onClick={resetSeed}>Rikthe nga faqja</button>
+              <button className="btn btn-ghost" onClick={resetSeed}>Rikthe te versioni i publikuar</button>
             </div>
           </>
         ) : (
