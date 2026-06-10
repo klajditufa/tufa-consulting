@@ -169,14 +169,12 @@ function Publications({ lang, go }){
       <section className="pub-feat-sec">
         <div className="wrap">
           <Reveal>
-            <div className="pub-feat">
+            <div className={"pub-feat"+(feat.img?"":" no-img")}>
+              {feat.img && (
               <div className="ph-slot pub-feat-img" style={{aspectRatio:"16 / 9"}}>
-                {feat.img
-                  ? <img src={feat.img} alt={tx(feat.t,lang)} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",borderRadius:"3px"}}/>
-                  : <image-slot id="pub-featured" shape="rounded" radius="3"
-                      placeholder={lang==="sq"?"Tërhiqni një foto":"Drop a photo"}
-                      style={{width:"100%",height:"100%",display:"block"}}></image-slot>}
+                <img src={feat.img} alt={tx(feat.t,lang)} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",borderRadius:"3px"}}/>
               </div>
+              )}
               <div className="pub-feat-body pub-feat-click" onClick={()=>go("article",0)} role="link" tabIndex="0">
                 <div className="pub-tags">
                   <span className="pub-cat-tag">{catName(feat.cat)}</span>

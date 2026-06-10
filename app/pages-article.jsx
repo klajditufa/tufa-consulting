@@ -25,15 +25,13 @@ function Article({ lang, go, arg }){
           <p className="art-standfirst">{tx(p.x,lang)}</p>
         </div>
 
+        {p.img && (
         <div className="wrap">
           <div className="ph-slot art-hero-img" style={{aspectRatio:"16 / 9"}}>
-            {p.img
-              ? <img src={p.img} alt={tx(p.t,lang)} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",borderRadius:"4px"}}/>
-              : <image-slot id={"pub-img-"+idx} shape="rounded" radius="4"
-                  placeholder={lang==="sq"?"Tërhiqni një foto për këtë artikull":"Drop a photo for this article"}
-                  style={{width:"100%",height:"100%",display:"block"}}></image-slot>}
+            <img src={p.img} alt={tx(p.t,lang)} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",borderRadius:"4px"}}/>
           </div>
         </div>
+        )}
 
         <div className="wrap art-body">
           {A.lede && <p className="art-lede">{tx(A.lede,lang)}</p>}

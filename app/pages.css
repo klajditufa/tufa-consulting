@@ -240,6 +240,7 @@
 /* ===================== PUBLICATIONS PAGE ===================== */
 .pub-feat-sec{padding-top:clamp(40px,5vw,64px)}
 .pub-feat{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,52px);align-items:center}
+.pub-feat.no-img{grid-template-columns:1fr;max-width:760px}
 .pub-feat-img{border-radius:3px}
 .pub-tags{display:flex;align-items:center;gap:16px;margin-bottom:18px}
 .pub-cat-tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-deep);
