@@ -33,10 +33,9 @@ function About({ lang, go }){
       <section className="section about-story">
         <div className="wrap about-grid">
           <Reveal className="about-photo">
-            <div className="ph-slot" style={{aspectRatio:"4 / 5"}}>
-              <image-slot id="about-team" shape="rounded" radius="3" src="assets/about-team.webp"
-                placeholder={lang==="sq"?"Tërhiqni një foto këtu":"Drop a photo here"}
-                style={{width:"100%",height:"100%",display:"block"}}></image-slot>
+            <div className="ph-slot" style={{aspectRatio:"3 / 2"}}>
+              <img src="assets/about-team.webp?v=2" alt={lang==="sq"?"Ekipi i TUFA Consult":"The TUFA Consult team"}
+                style={{width:"100%",height:"100%",objectFit:"contain",display:"block",borderRadius:"3px"}}/>
             </div>
           </Reveal>
           <Reveal className="about-copy" delay={80}>
