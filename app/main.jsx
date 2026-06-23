@@ -11,6 +11,19 @@ function App(){
     document.documentElement.lang = lang; }, [lang]);
   useE(()=>{ if(arg==null) localStorage.removeItem("tufa_arg"); else localStorage.setItem("tufa_arg", String(arg)); }, [arg]);
 
+  // Google Analytics — dërgo një "page_view" sa herë ndërron faqja
+  useE(()=>{
+    if(typeof window.gtag !== "function") return;
+    const titles = { home:"Ballina", about:"Kush jemi", services:"Shërbimet",
+      pricing:"Çmimet", pubs:"Publikimet", contact:"Kontakt", article:"Artikull" };
+    window.gtag('event','page_view',{
+      page_title: (titles[page]||page)+" — TUFA Consult",
+      page_path: "/"+page+(page==="article"&&arg!=null?("/"+arg):""),
+      page_location: location.origin+location.pathname+"#"+page,
+      language: lang
+    });
+  }, [page, arg, lang]);
+
   const go = (p, a)=>{
     setPage(p);
     if(a !== undefined) setArg(a);
