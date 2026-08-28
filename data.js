@@ -1,157 +1,237 @@
-/* ============== TUFA Consult — shared components ============== */
-const { useState, useEffect, useRef } = React;
+/* ============== TUFA Consult — content (SQ primary / EN) ============== */
+window.TUFA = {
+  brand: { name: "TUFA Consult", tag: "SOLUTIONS" },
 
-/* language helper: pick sq/en from a {sq,en} pair, pass-through plain strings */
-function tx(v, lang){
-  if (v == null) return "";
-  if (typeof v === "object") return v[lang] ?? v.sq ?? "";
-  return v;
-}
+  nav: [
+    { id: "services", sq: "Shërbime",   en: "Services" },
+    { id: "pricing",  sq: "Çmimet",     en: "Pricing" },
+    { id: "pubs",     sq: "Publikime",  en: "Publications" },
+    { id: "contact",  sq: "Kontakt",    en: "Contact" },
+  ],
 
-/* up-right arrow motif (from the logo) */
-function Arrow({ size = 15, cls = "" }){
-  return (
-    <svg className={"arr " + cls} width={size} height={size} viewBox="0 0 16 16" fill="none"
-      style={{ display:"inline-block", flex:"0 0 auto" }}>
-      <path d="M4.5 11.5L11.5 4.5M6 4.5h5.5V10" stroke="currentColor" strokeWidth="1.6"
-        strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
-}
+  ui: {
+    cta_contact:   { sq: "Na kontaktoni",        en: "Get in touch" },
+    cta_services:  { sq: "Shiko shërbimet",      en: "Explore services" },
+    cta_all_pubs:  { sq: "Të gjitha publikimet", en: "All publications" },
+    cta_read:      { sq: "Lexo",                 en: "Read" },
+    cta_about:     { sq: "Më shumë për ne",      en: "More about us" },
+    cta_book:      { sq: "Cakto një takim",      en: "Book a consultation" },
+    filter_all:    { sq: "Të gjitha",            en: "All" },
+    rights:        { sq: "Të gjitha të drejtat e rezervuara.", en: "All rights reserved." },
+  },
 
-/* wordmark for light backgrounds */
-function Wordmark({ onClick, mono }){
-  return (
-    <a href="#" onClick={(e)=>{e.preventDefault(); onClick&&onClick();}} className="wordmark" aria-label="TUFA Consult">
-      <span className="wm-row">
-        <span className="wm-name">TUFA</span>
-        <span className="wm-sub">Consult</span>
-        <span className="wm-arrow"><Arrow size={13}/></span>
-      </span>
-      {!mono && <span className="wm-tag">SOLUTIONS</span>}
-    </a>
-  );
-}
+  hero: {
+    eyebrow: { sq: "Konsulencë financiare & kontabël", en: "Financial & accounting consultancy" },
+    title:   { sq: "Numra të qartë.\nBiznes i qetë.", en: "Clear numbers.\nA calmer business." },
+    lead:    {
+      sq: "TUFA Consult ofron mbështetje të plotë në kontabilitet, programe fiskale dhe mbylljen e bilanceve — që ju të fokusoheni te rritja, jo te numrat.",
+      en: "TUFA Consult provides end-to-end support in accounting, fiscal programs and balance-sheet closing — so you focus on growth, not the numbers."
+    },
+  },
 
-/* simple geometric line icons for services */
-function SvcIcon({ name }){
-  const c = { width:26, height:26, viewBox:"0 0 24 24", fill:"none",
-    stroke:"currentColor", strokeWidth:1.4, strokeLinecap:"round", strokeLinejoin:"round" };
-  const P = {
-    ledger: <><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 3v18M11 8h6M11 12h6M11 16h4"/></>,
-    chip:   <><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 9h6v6H9zM10 3v3M14 3v3M10 18v3M14 18v3M3 10h3M3 14h3M18 10h3M18 14h3"/></>,
-    scale:  <><path d="M12 4v16M6 20h12M5 8h14M5 8l-2.5 5a2.5 2.5 0 005 0L5 8zM19 8l-2.5 5a2.5 2.5 0 005 0L19 8z"/></>,
-    doc:    <><path d="M6 3h8l4 4v14H6zM14 3v4h4"/><path d="M9 13h6M9 17h6"/></>,
-    support:<><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M14.1 9.9l3-3M6.9 17.1l3-3M14.1 14.1l3 3M6.9 6.9l3 3"/></>,
-    chart:  <><path d="M4 20V4M4 20h16"/><path d="M8 16l3-4 3 2 4-6"/></>,
-  };
-  return <svg {...c}>{P[name] || P.doc}</svg>;
-}
+  intro: {
+    eyebrow: { sq: "Kush jemi", en: "Who we are" },
+    body: {
+      sq: "Jemi një studio konsulence e përkushtuar t'i japë bizneseve qartësi dhe siguri në numrat e tyre. Nga ndërmarrjet e vogla te kompanitë në rritje, ju mbështesim në çdo hap — nga mbajtja e përditshme e kontabilitetit deri te mbyllja e bilanceve vjetore.",
+      en: "We are a consultancy devoted to giving businesses clarity and confidence in their numbers. From small enterprises to growing companies, we support you at every step — from day-to-day bookkeeping to closing the annual balance sheet."
+    }
+  },
 
-/* ---------------- Header ---------------- */
-function Header({ page, go, lang, setLang }){
-  const T = window.TUFA;
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(()=>{
-    const f = ()=> setScrolled(window.scrollY > 8);
-    f(); window.addEventListener("scroll", f, { passive:true });
-    return ()=> window.removeEventListener("scroll", f);
-  },[]);
-  useEffect(()=>{ setOpen(false); },[page]);
+  services: {
+    eyebrow: { sq: "Çfarë bëjmë", en: "What we do" },
+    title:   { sq: "Shërbime", en: "Services" },
+    lead: {
+      sq: "Mbështetje në të gjitha nevojat e biznesit për mbajtjen e kontabilitetit dhe mbylljen e bilanceve.",
+      en: "Support across every business need for keeping the books and closing balances."
+    },
+    items: [
+      { n: "01", icon: "ledger",
+        t: { sq: "Shërbime Financiare & Kontabilitet", en: "Financial & Accounting Services" },
+        d: { sq: "Mbajtja e plotë e kontabilitetit, regjistrimi i transaksioneve dhe raportimi periodik financiar.",
+             en: "Full bookkeeping, transaction recording and periodic financial reporting." } },
+      { n: "02", icon: "chip",
+        t: { sq: "Programe Fiskale & Kontabël", en: "Fiscal & Accounting Programs" },
+        d: { sq: "Konfigurim dhe administrim i programeve fiskale e kontabël, në përputhje me legjislacionin në fuqi.",
+             en: "Setup and administration of fiscal and accounting software, compliant with current legislation." } },
+      { n: "03", icon: "scale",
+        t: { sq: "Mbyllje Bilancesh & Pasqyra", en: "Balance-Sheet Closing & Statements" },
+        d: { sq: "Përgatitja dhe mbyllja e bilanceve vjetore e pasqyrave financiare, të sakta dhe në afat.",
+             en: "Preparation and closing of annual balance sheets and statements — accurate and on time." } },
+      { n: "04", icon: "doc",
+        t: { sq: "Konsulencë Fiskale", en: "Fiscal Consulting" },
+        d: { sq: "Këshillim për detyrimet tatimore, deklarimet dhe optimizimin fiskal të biznesit.",
+             en: "Guidance on tax obligations, declarations and the fiscal optimization of the business." } },
+      { n: "05", icon: "support",
+        t: { sq: "Mbështetje për Biznese", en: "Business Support" },
+        d: { sq: "Suport i vazhdueshëm për çdo nevojë të biznesit në fushën financiare dhe kontabël.",
+             en: "Ongoing support for every business need in finance and accounting." } },
+      { n: "06", icon: "chart",
+        t: { sq: "Raportim & Analizë", en: "Reporting & Analysis" },
+        d: { sq: "Raporte të qarta menaxheriale që e kthejnë informacionin financiar në vendime.",
+             en: "Clear management reports that turn financial data into decisions." } },
+    ]
+  },
 
-  return (
-    <header className={"hdr" + (scrolled ? " is-scrolled" : "")}>
-      <div className="hdr-inner wrap">
-        <Wordmark onClick={()=>go("home")} />
+  pricing: {
+    eyebrow: { sq: "Paketat", en: "Plans" },
+    title:   { sq: "Çmime të qarta, pa surpriza", en: "Clear pricing, no surprises" },
+    lead: {
+      sq: "Tri paketa kontabiliteti të përshtatura me ritmin e biznesit tuaj — nga regjistrime gjashtëmujore deri te mbështetje e plotë mujore. Tarifa përcaktohet sipas vëllimit dhe nevojave.",
+      en: "Three accounting packages tailored to your business rhythm — from six-monthly bookkeeping to full monthly support. The fee is set by volume and needs."
+    },
+    unit: { sq: "Lekë / muaj", en: "ALL / month" },
+    tiers: [
+      { id: "start", featured: false,
+        name: "Start",
+        tagline: { sq: "Për biznese në hapat e parë", en: "For businesses in their first steps" },
+        price:   { sq: "15.000 – 45.000", en: "15,000 – 45,000" },
+        foot:    { sq: "Tarifa minimale 15.000 Lekë/muaj", en: "Minimum fee 15,000 ALL/month" },
+        highlights: {
+          sq: ["Regjistrime kontabël 6-mujore", "Deklarime tatimore të plota", "Komunikim pa limit", "Përgjigje brenda 1 jave", "Programi EasyPOS"],
+          en: ["6-monthly bookkeeping", "Full tax declarations", "Unlimited communication", "Response within 1 week", "EasyPOS software (local)"]
+        } },
+      { id: "standart", featured: true,
+        name: "Standart",
+        tagline: { sq: "Më e zgjedhura nga bizneset", en: "Most chosen by businesses" },
+        price:   { sq: "50.000 – 80.000", en: "50,000 – 80,000" },
+        foot:    { sq: "Gjithçka te Start, plus më shumë", en: "Everything in Start, plus more" },
+        highlights: {
+          sq: ["Regjistrime kontabël 3-mujore", "Pasqyra financiare vjetore", "Përgjigje brenda 1 dite", "Takime çdo 3 muaj", "Programi EasyPOS"],
+          en: ["3-monthly bookkeeping", "Annual financial statements", "Response within 1 day", "Meetings every 3 months", "EasyPOS software (local)"]
+        } },
+      { id: "premium", featured: false,
+        name: "Premium",
+        tagline: { sq: "Mbështetje e plotë, çdo muaj", en: "Full support, every month" },
+        price:   { sq: "mbi 80.000", en: "over 80,000" },
+        foot:    { sq: "Shërbimi më i plotë", en: "The most complete service" },
+        highlights: {
+          sq: ["Regjistrime kontabël mujore", "Përgjigje brenda 1 ore", "Faturim & pagesa bankare", "Mbështetje ligjore & kontrata", "Programi EasyBooks (online)"],
+          en: ["Monthly bookkeeping", "Response within 1 hour", "Invoicing & bank payments", "Legal support & contracts", "EasyBooks software (online)"]
+        } },
+    ],
+    groups: [
+      { name: { sq: "Shërbime", en: "Services" }, rows: [
+        { f: { sq: "Regjistrime kontabël", en: "Bookkeeping entries" },
+          d: { sq: "Rakordimi i regjistrimeve kontabël", en: "Reconciliation of accounting entries" },
+          v: { start: { sq: "6-Mujore", en: "6-monthly" }, standart: { sq: "3-Mujore", en: "3-monthly" }, premium: { sq: "Mujore", en: "Monthly" } } },
+        { f: { sq: "Deklarime tatimore", en: "Tax declarations" },
+          d: { sq: "Deklarimet tatimore për të gjitha përgjegjësitë tatimore", en: "Tax declarations for all fiscal liabilities" },
+          v: { start: true, standart: true, premium: true } },
+        { f: { sq: "Përgatitja e Pasqyrave Financiare", en: "Financial statements" },
+          d: { sq: "Përgatitja e pasqyrave financiare vjetore", en: "Preparation of annual financial statements" },
+          v: { start: false, standart: true, premium: true } },
+        { f: { sq: "Dosjet e punonjësve", en: "Employee files" },
+          d: { sq: "Administrimi i dosjes së personelit (kontrata, regjistra)", en: "Personnel file management (contracts, records)" },
+          v: { start: false, standart: false, premium: true } },
+      ] },
+      { name: { sq: "Suport", en: "Support" }, rows: [
+        { f: { sq: "Komunikimi", en: "Communication" },
+          d: { sq: "Komunikimi nëpërmjet telefonit, e-mailit apo mesazheve", en: "Communication by phone, e-mail or messaging" },
+          v: { start: { sq: "Pa limit", en: "Unlimited" }, standart: { sq: "Pa limit", en: "Unlimited" }, premium: { sq: "Pa limit", en: "Unlimited" } } },
+        { f: { sq: "Koha e përgjigjes", en: "Response time" },
+          d: { sq: "Koha e përgjigjes nga zyra e kontabilitetit për rastin", en: "Response time from the accounting office per case" },
+          v: { start: { sq: "1 Javë", en: "1 week" }, standart: { sq: "1 Ditë", en: "1 day" }, premium: { sq: "1 Orë", en: "1 hour" } } },
+        { f: { sq: "Ndryshime në regjistrim tregtar", en: "Trade-register changes" },
+          d: { sq: "Ndryshime të anëtarëve, kontakte", en: "Member changes, contacts" },
+          v: { start: false, standart: false, premium: true } },
+        { f: { sq: "Takime", en: "Meetings" },
+          d: { sq: "Mundësia e organizimit të takimeve", en: "Ability to organize meetings" },
+          v: { start: { sq: "6-Mujore", en: "6-monthly" }, standart: { sq: "3-Mujore", en: "3-monthly" }, premium: { sq: "Mujore", en: "Monthly" } } },
+        { f: { sq: "Parashikimi i rezultatit tatimor", en: "Tax-result forecast" },
+          d: { sq: "Përgatitja e raporteve periodike për parashikimin e tatimit", en: "Periodic reports forecasting tax due" },
+          v: { start: { sq: "6-Mujore", en: "6-monthly" }, standart: { sq: "3-Mujore", en: "3-monthly" }, premium: { sq: "Mujore", en: "Monthly" } } },
+        { f: { sq: "Raport Financiar", en: "Financial report" },
+          d: { sq: "Përgatitja dhe diskutimi i raporteve të brendshme (real)", en: "Preparation and discussion of internal reports (real)" },
+          v: { start: { sq: "Këshillim", en: "Advisory" }, standart: { sq: "Rishikim", en: "Review" }, premium: { sq: "Përgatitje", en: "Full prep" } } },
+        { f: { sq: "Lëshim i faturave tatimore", en: "Issuing tax invoices" },
+          d: { sq: "Lëshimi i faturave tatimore nga ana jonë", en: "We issue tax invoices on your behalf" },
+          v: { start: false, standart: false, premium: true } },
+        { f: { sq: "Pagesa në bankë", en: "Bank payments" },
+          d: { sq: "Kryerja e pagesës së detyrimeve (e-banking ose sportel banke)", en: "Settling liabilities (e-banking or at the counter)" },
+          v: { start: false, standart: false, premium: true } },
+        { f: { sq: "Ligjore", en: "Legal" },
+          d: { sq: "Përgatitja e kontratave dhe opinione ligjore", en: "Drafting contracts and legal opinions" },
+          v: { start: false, standart: false, premium: true } },
+      ] },
+      { name: { sq: "Software", en: "Software" }, rows: [
+        { f: { sq: "EasyPOS", en: "EasyPOS" },
+          d: { sq: "Administrimi dhe ruajtja e të dhënave", en: "Local data management and storage" },
+          v: { start: true, standart: true, premium: false } },
+        { f: { sq: "EasyBooks", en: "EasyBooks" },
+          d: { sq: "Administrimi i të dhënave online dhe akses i plotë në çdo moment", en: "Online data management with full access anytime" },
+          v: { start: false, standart: false, premium: true } },
+      ] },
+    ],
+    notes: {
+      sq: [
+        "Nuk përfshihen shërbimet për: (a) Leje qëndrimi, (b) Licencë, (c) Procedura për largim nga puna të punonjësve, (d) Mbrojtje marke.",
+        "Tarifa minimale nuk aplikohet për të gjitha rastet, por është çmimi minimal në të gjitha bashkëpunimet. Pas diskutimeve tona, mund të rezultojë që paketa Start të ketë çmim më të lartë se 15.000 Lekë/muaj.",
+      ],
+      en: [
+        "The following are not included: (a) Residence permits, (b) Licensing, (c) Employee dismissal procedures, (d) Trademark protection.",
+        "The minimum fee does not apply to every case but is the floor across all engagements. After our discussion, the Start package may end up higher than 15,000 ALL/month.",
+      ]
+    }
+  },
 
-        <nav className="nav-desktop">
-          {T.nav.map(n=>(
-            <a key={n.id} href="#"
-               onClick={(e)=>{e.preventDefault(); go(n.id);}}
-               className={"navlink" + ((page===n.id || (page==="article" && n.id==="pubs")) ? " active" : "")}>
-              {tx(n, lang)}
-            </a>
-          ))}
-        </nav>
+  process: {
+    eyebrow: { sq: "Si punojmë", en: "How we work" },
+    title:   { sq: "Një proces i thjeshtë, i parashikueshëm", en: "A simple, predictable process" },
+    steps: [
+      { k: "01", t: { sq: "Njohja",     en: "Discovery" }, d: { sq: "Kuptojmë biznesin, strukturën dhe nevojat tuaja financiare.", en: "We understand your business, structure and financial needs." } },
+      { k: "02", t: { sq: "Konfigurimi", en: "Setup" },    d: { sq: "Vendosim sistemin kontabël e fiskal të përshtatur me biznesin.", en: "We set up the accounting and fiscal system tailored to you." } },
+      { k: "03", t: { sq: "Mbajtja",    en: "Bookkeeping" },d: { sq: "Regjistrojmë e administrojmë çdo transaksion me saktësi.", en: "We record and manage every transaction with precision." } },
+      { k: "04", t: { sq: "Raportimi",  en: "Reporting" },  d: { sq: "Bilancet, pasqyrat dhe raportet — gjithmonë në afat.", en: "Balances, statements and reports — always on time." } },
+    ]
+  },
 
-        <div className="hdr-right">
-          <div className="lang" role="group" aria-label="Language">
-            {["sq","en"].map(l=>(
-              <button key={l} className={"lang-btn"+(lang===l?" on":"")} onClick={()=>setLang(l)}>
-                {l.toUpperCase()}
-              </button>
-            ))}
-          </div>
-          <button className="btn btn-orange hdr-cta" onClick={()=>go("contact")}>
-            {tx(T.ui.cta_contact, lang)} <Arrow/>
-          </button>
-          <button className={"burger"+(open?" x":"")} aria-label="Menu" onClick={()=>setOpen(o=>!o)}>
-            <span></span><span></span>
-          </button>
-        </div>
-      </div>
+  values: {
+    eyebrow: { sq: "Parime", en: "Principles" },
+    items: [
+      { t: { sq: "Saktësi", en: "Precision" }, d: { sq: "Çdo shifër e kontrolluar, çdo afat i respektuar.", en: "Every figure checked, every deadline kept." } },
+      { t: { sq: "Transparencë", en: "Transparency" }, d: { sq: "E dini gjithmonë ku qëndron biznesi juaj.", en: "You always know where your business stands." } },
+      { t: { sq: "Konfidencialitet", en: "Confidentiality" }, d: { sq: "Të dhënat tuaja i trajtojmë me kujdes maksimal.", en: "Your data is handled with the utmost care." } },
+      { t: { sq: "Përkushtim", en: "Commitment" }, d: { sq: "Një partner që përgjigjet kur keni nevojë.", en: "A partner who responds when you need them." } },
+    ]
+  },
 
-      <div className={"nav-mobile"+(open?" show":"")}>
-        {T.nav.map(n=>(
-          <a key={n.id} href="#" onClick={(e)=>{e.preventDefault(); go(n.id);}}
-             className={"m-link"+(page===n.id?" active":"")}>
-            {tx(n, lang)} <Arrow size={16}/>
-          </a>
-        ))}
-        <div className="m-foot">
-          <div className="lang">
-            {["sq","en"].map(l=>(
-              <button key={l} className={"lang-btn"+(lang===l?" on":"")} onClick={()=>setLang(l)}>{l.toUpperCase()}</button>
-            ))}
-          </div>
-          <button className="btn btn-orange" onClick={()=>go("contact")}>{tx(T.ui.cta_contact,lang)} <Arrow/></button>
-        </div>
-      </div>
-    </header>
-  );
-}
+  pubs: {
+    eyebrow: { sq: "Publikime", en: "Publications" },
+    title:   { sq: "Njohuri & analiza", en: "Insight & analysis" },
+    lead: {
+      sq: "Shkrime praktike mbi fiskalitetin, kontabilitetin dhe raportimin financiar për bizneset.",
+      en: "Practical writing on fiscal policy, accounting and financial reporting for businesses."
+    },
+    cats: [
+      { id: "fiskale",      sq: "Fiskale",      en: "Fiscal" },
+      { id: "kontabilitet", sq: "Kontabilitet", en: "Accounting" },
+      { id: "raportim",     sq: "Raportim",     en: "Reporting" },
+      { id: "legjislacion", sq: "Legjislacion", en: "Legislation" },
+    ],
+    /* items popullohen nga app/pubs-data.js (gjenerohet nga admin.html) */
+    items: []
+  },
 
-/* ---------------- Footer ---------------- */
-function Footer({ go, lang }){
-  const T = window.TUFA;
-  return (
-    <footer className="ftr">
-      <div className="wrap">
-        <div className="ftr-top">
-          <div className="ftr-brand">
-            <img src="assets/logo-dark.png" alt="TUFA Consult" className="ftr-logo"/>
-            <p className="ftr-blurb">{tx(T.intro.body, lang)}</p>
-          </div>
-          <div className="ftr-cols">
-            <div className="ftr-col">
-              <span className="ftr-h">{lang==="sq"?"Faqet":"Pages"}</span>
-              {T.nav.map(n=>(
-                <a key={n.id} href="#" onClick={(e)=>{e.preventDefault(); go(n.id);}}>{tx(n,lang)}</a>
-              ))}
-            </div>
-            <div className="ftr-col">
-              <span className="ftr-h">{lang==="sq"?"Kontakt":"Contact"}</span>
-              {T.contact.details.map((d,i)=>(
-                <span key={i} className="ftr-val">{tx(d.v, lang)}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-        <hr className="ftr-rule"/>
-        <div className="ftr-bot">
-          <span>© {new Date().getFullYear()} TUFA Consult. {tx(T.ui.rights, lang)}</span>
-          <span className="ftr-mono">TIRANË · SHQIPËRI</span>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-/* layout wrapper — content visible by default; class hook kept for callers */
-function Reveal({ children, delay=0, className="", as="div" }){
-  const Tag = as;
-  return <Tag className={"reveal " + className}>{children}</Tag>;
-}
-
-Object.assign(window, { tx, Arrow, Wordmark, SvcIcon, Header, Footer, Reveal });
+  contact: {
+    eyebrow: { sq: "Kontakt", en: "Contact" },
+    title:   { sq: "Le të flasim për numrat tuaj", en: "Let's talk about your numbers" },
+    lead: {
+      sq: "Na shkruani për një konsultë fillestare pa pagesë. Ju përgjigjemi brenda një dite pune.",
+      en: "Write to us for a free initial consultation. We reply within one business day."
+    },
+    fields: {
+      name:    { sq: "Emri i plotë",     en: "Full name" },
+      email:   { sq: "Email",            en: "Email" },
+      company: { sq: "Biznesi / Kompania", en: "Business / Company" },
+      message: { sq: "Si mund t'ju ndihmojmë?", en: "How can we help?" },
+      send:    { sq: "Dërgo mesazhin", en: "Send message" },
+      sent:    { sq: "Faleminderit! Do t'ju kontaktojmë së shpejti.", en: "Thank you! We'll be in touch shortly." },
+    },
+    details: [
+      { k: { sq: "Email",     en: "Email" },   v: "info@tufa.consulting" },
+      { k: { sq: "Telefon",   en: "Phone" },   v: "+355 69 60 52 163" },
+      { k: { sq: "Adresa",    en: "Address" }, v: { sq: "Rr. Bardhok Biba, Tiranë, Shqipëri", en: "Rr. Bardhok Biba, Tirana, Albania" } },
+      { k: { sq: "Orari",     en: "Hours" },   v: { sq: "Hën–Pre, 09:00–17:00", en: "Mon–Fri, 09:00–17:00" } },
+    ]
+  },
+};

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TUFA Consult — Numra të qartë. Biznes i qetë.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,420;1,6..72,460&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<style>
+:root{
+  --ink:#1d1d1d; --charcoal:#363636; --coal:#202020;
+  --orange:#ff9d3b; --orange-deep:#f08410;
+  --bg:#faf8f4; --bg2:#f3efe8;
+  --muted:#73706a; --muted-d:rgba(255,255,255,.56);
+  --line:rgba(54,54,54,.14); --line-d:rgba(255,255,255,.13);
+  --serif:'Newsreader',Georgia,serif;
+  --sans:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'Spline Sans Mono',ui-monospace,monospace;
+  --pad:clamp(20px,5vw,84px);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--ink);color:#fff;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--orange)}
+img{max-width:100%;display:block}
+::selection{background:var(--orange);color:#1d1d1d}
+.ey{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;display:inline-flex;align-items:center;gap:12px}
+.ey::before{content:"";width:24px;height:1px;background:var(--orange)}
+.btn{display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:15px;padding:14px 26px;border-radius:2px;white-space:nowrap;min-height:48px;cursor:pointer;transition:background .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease)}
+.btn:hover{transform:translateY(-2px)}
+.btn .arr{transition:transform .3s var(--ease)}
+.btn:hover .arr{transform:translate(3px,-3px)}
+.btn-orange{background:var(--orange);color:#1d1d1d}
+.btn-orange:hover{background:var(--orange-deep);color:#1d1d1d}
+.btn-ghost{border:1px solid var(--line-d);color:#fff}
+.btn-ghost:hover{border-color:#fff;color:#fff}
+.wrap{max-width:1280px;margin:0 auto}
+/* preloader */
+#pre{position:fixed;inset:0;background:var(--coal);z-index:200;display:flex;flex-direction:column;justify-content:space-between;padding:26px var(--pad);transition:transform .7s cubic-bezier(.7,0,.3,1)}
+#pre.out{transform:translateY(-101%)}
+#pre .pre-top{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-d)}
+#pre .pre-num{font-family:var(--serif);font-weight:420;font-size:clamp(90px,16vw,220px);line-height:.9;letter-spacing:-.03em;align-self:flex-end;font-variant-numeric:tabular-nums}
+#pre .pre-num i{font-style:normal;color:var(--orange)}
+/* progress + nav */
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--orange);z-index:120}
+.nav{position:fixed;top:0;left:0;right:0;z-index:110;display:flex;align-items:center;justify-content:space-between;padding:22px var(--pad)}
+.nav-brand{mix-blend-mode:difference;color:#fff;display:flex;align-items:baseline;gap:10px}
+.nav-brand b{font-weight:800;letter-spacing:.01em;font-size:19px}
+.nav-brand span{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;opacity:.7}
+.nav-right{display:flex;align-items:center;gap:26px}
+.nav-right .lnk{mix-blend-mode:difference;color:#fff;font-weight:600;font-size:15px}
+/* pinned hero */
+.act{position:relative}
+.pin{position:sticky;top:0;height:100vh;overflow:hidden}
+.act-hero{height:520vh;background:var(--ink)}
+#gl{position:absolute;inset:0;width:100%;height:100%}
+.ph{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad);opacity:0;pointer-events:none}
+.ph .ey{color:var(--muted-d)}
+.ph-ttl{font-family:var(--serif);font-weight:420;letter-spacing:-.02em;line-height:.98;font-size:clamp(46px,9.5vw,140px);margin-top:24px}
+.ph-ttl em{font-style:italic;font-weight:460;color:var(--orange)}
+.ph-sub{max-width:46ch;font-size:clamp(16px,1.4vw,20px);color:var(--muted-d);margin-top:26px;line-height:1.65}
+.ph-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px}
+#ph3.live{pointer-events:auto}
+.hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-d);display:flex;flex-direction:column;align-items:center;gap:10px;transition:opacity .4s}
+.hint::after{content:"";width:1px;height:36px;background:linear-gradient(var(--orange),transparent)}
+.hero-meta{position:absolute;right:var(--pad);bottom:26px;z-index:6;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-d);text-align:right;line-height:2.1}
+/* statement */
+.act-words{height:280vh;background:var(--bg);color:var(--ink)}
+.act-words .pin{display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad)}
+.act-words .ey{color:var(--muted)}
+#words{font-family:var(--serif);font-weight:430;letter-spacing:-.014em;line-height:1.18;font-size:clamp(25px,3.5vw,52px);max-width:27ch;margin-top:30px}
+#words span{opacity:.13}
+#words span.on{opacity:1;transition:opacity .25s linear}
+.words-cta{margin-top:42px;opacity:0;transform:translateY(14px);transition:all .5s var(--ease)}
+.words-cta.on{opacity:1;transform:none}
+.tlink{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:3px}
+.tlink:hover{border-color:var(--orange);color:var(--ink)}
+/* services */
+.act-serv{height:440vh;background:var(--coal)}
+.act-serv .pin{display:flex;flex-direction:column;justify-content:center}
+.serv-head{display:flex;align-items:flex-end;justify-content:space-between;padding:0 var(--pad);margin-bottom:clamp(28px,4vh,54px)}
+.serv-head .ey{color:var(--muted-d)}
+.serv-ttl{font-family:var(--serif);font-weight:420;font-size:clamp(38px,5.5vw,84px);letter-spacing:-.018em;line-height:1;margin-top:16px}
+.serv-count{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--muted-d)}
+#track{display:flex;gap:clamp(16px,2vw,28px);padding:0 var(--pad);will-change:transform}
+.svc{flex:0 0 clamp(290px,31vw,440px);background:var(--charcoal);border:1px solid rgba(255,255,255,.07);padding:30px 30px 28px;display:flex;flex-direction:column;min-height:clamp(300px,38vh,400px);transition:border-color .3s}
+.svc:hover{border-color:rgba(255,157,59,.5)}
+.svc-n{font-family:var(--serif);font-style:italic;font-size:clamp(40px,3.4vw,58px);font-weight:420;color:var(--orange);line-height:1}
+.svc-t{font-family:var(--serif);font-weight:440;font-size:clamp(22px,1.9vw,29px);line-height:1.14;letter-spacing:-.01em;margin-top:auto}
+.svc-d{color:var(--muted-d);font-size:15.5px;line-height:1.6;margin-top:13px}
+.svc-end{flex:0 0 clamp(280px,28vw,400px);display:flex;align-items:center;justify-content:center;border:1px dashed rgba(255,255,255,.2)}
+/* stats */
+.stats{background:var(--bg);color:var(--ink);padding:clamp(84px,12vw,160px) var(--pad) clamp(70px,9vw,120px)}
+.stats .ey{color:var(--muted)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(24px,3vw,44px);margin-top:52px}
+.stat{border-top:1px solid var(--line);padding-top:22px}
+.stat-v{font-family:var(--serif);font-weight:420;font-size:clamp(52px,6vw,96px);letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.stat-v i{font-style:italic;color:var(--orange);font-size:.55em}
+.stat-l{font-size:15px;color:var(--muted);margin-top:12px;max-width:22ch}
+/* process */
+.proc{background:var(--bg);color:var(--ink);padding:0 var(--pad) clamp(90px,12vw,170px)}
+.proc .ey{color:var(--muted)}
+.proc-ttl{font-family:var(--serif);font-weight:430;font-size:clamp(30px,4vw,58px);letter-spacing:-.015em;margin:20px 0 46px;max-width:18ch}
+.proc-row{display:grid;grid-template-columns:minmax(70px,120px) 1fr 1.5fr;gap:clamp(16px,3vw,44px);align-items:baseline;padding:clamp(22px,3vw,34px) 0;border-top:1px solid var(--line);opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.proc-row:last-child{border-bottom:1px solid var(--line)}
+.proc-row.on{opacity:1;transform:none}
+.proc-k{font-family:var(--serif);font-style:italic;font-size:clamp(26px,2.6vw,40px);color:var(--orange)}
+.proc-t{font-family:var(--serif);font-weight:450;font-size:clamp(24px,2.4vw,36px);letter-spacing:-.01em}
+.proc-d{color:var(--muted);font-size:clamp(15px,1.2vw,17px);line-height:1.65}
+/* marquee */
+.mq-sec{background:var(--ink);padding:clamp(64px,9vw,120px) 0;overflow:hidden}
+.mq-row{display:flex;white-space:nowrap;will-change:transform}
+.mq-row+.mq-row{margin-top:14px}
+.mq-item{font-family:var(--serif);font-weight:420;font-size:clamp(46px,7.5vw,116px);letter-spacing:-.02em;line-height:1.08;padding:0 .32em;color:#fff}
+.mq-item.o{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.32)}
+.mq-dot{color:var(--orange);font-family:var(--sans);font-size:.48em;vertical-align:.4em;padding:0 .18em}
+/* pricing */
+.price{background:var(--ink);padding:clamp(30px,5vw,70px) var(--pad) clamp(90px,12vw,150px)}
+.price .ey{color:var(--muted-d)}
+.price-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(36px,6vw,90px);align-items:end;margin-top:20px}
+.price-ttl{font-family:var(--serif);font-weight:420;font-size:clamp(34px,4.6vw,68px);letter-spacing:-.016em;line-height:1.03}
+.price-note{font-size:15.5px;color:var(--muted-d);margin-top:24px;max-width:44ch;line-height:1.65}
+.tier{display:flex;align-items:baseline;justify-content:space-between;gap:18px;padding:clamp(20px,2.6vw,30px) 0;border-top:1px solid var(--line-d);transition:padding-left .3s var(--ease)}
+.tier:hover{padding-left:10px}
+.tier:last-child{border-bottom:1px solid var(--line-d)}
+.tier-n{font-family:var(--serif);font-size:clamp(26px,2.6vw,40px);font-weight:425}
+.tier-n i{font-family:var(--mono);font-style:normal;font-size:12px;color:var(--orange);margin-right:16px;letter-spacing:.08em}
+.tier-tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#1d1d1d;background:var(--orange);padding:4px 9px;margin-left:14px;vertical-align:.35em}
+.tier-p{font-family:var(--mono);font-size:13px;color:var(--muted-d);text-align:right;white-space:nowrap}
+/* finale */
+.finale{background:var(--ink);min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:110px var(--pad) 0;position:relative;overflow:hidden}
+.finale .ey{color:var(--orange)}
+.fin-ttl{font-family:var(--serif);font-weight:420;letter-spacing:-.022em;line-height:.98;font-size:clamp(48px,9vw,138px);margin-top:26px;max-width:12ch}
+.fin-ttl em{font-style:italic;font-weight:460;color:var(--orange)}
+.fin-lead{max-width:44ch;font-size:clamp(16px,1.4vw,20px);color:var(--muted-d);margin-top:30px;line-height:1.65}
+.fin-cta{display:flex;gap:16px;flex-wrap:wrap;margin-top:44px}
+.fin-details{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;border-top:1px solid var(--line-d);margin-top:clamp(64px,9vw,120px);padding:30px 0 36px}
+.fin-k{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-d)}
+.fin-v{font-size:15.5px;font-weight:600;margin-top:9px}
+.foot{display:flex;justify-content:space-between;align-items:center;padding-bottom:26px;color:var(--muted-d);font-size:13px;flex-wrap:wrap;gap:10px}
+@supports (height:100dvh){
+  .pin{height:100dvh}
+  .act-words .pin,.act-serv .pin{height:100dvh}
+}
+@media (max-width:700px){
+  .act-hero{height:420vh}
+  .act-words{height:230vh}
+  .act-serv{height:360vh}
+  .ph-sub{font-size:15.5px}
+  .ph-cta .btn{width:100%;justify-content:center}
+}
+@media (max-width:900px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .price-grid{grid-template-columns:1fr}
+  .proc-row{grid-template-columns:56px 1fr;grid-template-rows:auto auto}
+  .proc-row .proc-d{grid-column:2}
+  .fin-details{grid-template-columns:repeat(2,1fr)}
+  .nav-right .lnk{display:none}
+  .hero-meta{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  #pre{display:none}
+  .act-hero,.act-words,.act-serv{height:auto}
+  .pin{position:relative;height:auto;min-height:100vh}
+  .ph{position:relative;inset:auto;opacity:1!important;pointer-events:auto;padding-top:14vh;padding-bottom:8vh}
+  #track{overflow-x:auto}
+  #words span{opacity:1}
+  .proc-row,.words-cta{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div id="pre" aria-hidden="true">
+  <div class="pre-top">TUFA Consult · Solutions — Tiranë</div>
+  <div class="pre-num"><span id="preN">00</span><i>%</i></div>
+</div>
+<div id="bar"></div>
+<nav class="nav">
+  <a class="nav-brand" href="index.html" onclick="goSite('services')"><b>TUFA Consult</b><span>Solutions</span></a>
+  <div class="nav-right">
+    <a class="lnk" href="index.html" onclick="goSite('services')">Webfaqja</a>
+    <a class="btn btn-orange" href="index.html" onclick="goSite('contact')" style="min-height:42px;padding:10px 20px">Na kontaktoni <span class="arr">↗</span></a>
+  </div>
+</nav>
+
+<!-- AKTI I — stuhia që bëhet rregull -->
+<section class="act act-hero" id="aHero">
+  <div class="pin">
+    <canvas id="gl"></canvas>
+    <div class="ph" id="ph1">
+      <span class="ey">TUFA Consult — Solutions</span>
+      <h1 class="ph-ttl">Fatura. Deklarata.<br>Bilance. Afate.</h1>
+      <p class="ph-sub">Çdo muaj, biznesi juaj noton në një stuhi numrash e dokumentesh.</p>
+    </div>
+    <div class="ph" id="ph2">
+      <h2 class="ph-ttl">Ne i vëmë <em>në rregull.</em></h2>
+      <p class="ph-sub">Kontabilitet i plotë, programe fiskale dhe mbyllje bilancesh — nga një studio e përkushtuar në Tiranë.</p>
+    </div>
+    <div class="ph" id="ph3">
+      <span class="ey">Konsulencë financiare &amp; kontabël</span>
+      <h2 class="ph-ttl">Numra të qartë.<br>Biznes i qetë.</h2>
+      <p class="ph-sub">TUFA Consult ofron mbështetje të plotë në kontabilitet, programe fiskale dhe mbylljen e bilanceve — që ju të fokusoheni te rritja, jo te numrat.</p>
+      <div class="ph-cta">
+        <a class="btn btn-orange" href="index.html" onclick="goSite('contact')">Cakto një takim <span class="arr">↗</span></a>
+        <a class="btn btn-ghost" href="index.html" onclick="goSite('services')">Shiko shërbimet</a>
+      </div>
+    </div>
+    <div class="hint" id="hint">Lëvizni poshtë</div>
+    <div class="hero-meta">Tiranë · Shqipëri<br>Hën–Pre, 09:00–17:00</div>
+  </div>
+</section>
+
+<!-- AKTI II — kush jemi -->
+<section class="act act-words" id="aWords">
+  <div class="pin">
+    <span class="ey">Kush jemi</span>
+    <p id="words" data-text="Jemi një studio konsulence e përkushtuar t'i japë bizneseve qartësi dhe siguri në numrat e tyre. Nga ndërmarrjet e vogla te kompanitë në rritje, ju mbështesim në çdo hap — nga mbajtja e përditshme e kontabilitetit deri te mbyllja e bilanceve vjetore."></p>
+    <div class="words-cta" id="wordsCta"><a class="tlink" href="index.html" onclick="goSite('services')">Çfarë bëjmë <span class="arr">↗</span></a></div>
+  </div>
+</section>
+
+<!-- AKTI III — shërbimet -->
+<section class="act act-serv" id="aServ">
+  <div class="pin">
+    <div class="serv-head">
+      <div><span class="ey">Çfarë bëjmë</span><h2 class="serv-ttl">Shërbime</h2></div>
+      <span class="serv-count" id="servCount">01 / 06</span>
+    </div>
+    <div id="track"></div>
+  </div>
+</section>
+
+<!-- numrat -->
+<section class="stats">
+  <span class="ey">Në një shikim</span>
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-v"><span data-count="6">0</span><i>+</i></div><div class="stat-l">Shërbime — nga kontabiliteti te raportimi</div></div>
+    <div class="stat"><div class="stat-v"><span data-count="3">0</span></div><div class="stat-l">Paketa të qarta: Start, Standart, Premium</div></div>
+    <div class="stat"><div class="stat-v"><span data-count="4">0</span></div><div class="stat-l">Hapa procesi — i thjeshtë, i parashikueshëm</div></div>
+    <div class="stat"><div class="stat-v"><span data-count="1">0</span> <i>orë</i></div><div class="stat-l">Koha më e shpejtë e përgjigjes (Premium)</div></div>
+  </div>
+</section>
+
+<!-- procesi -->
+<section class="proc">
+  <span class="ey">Si punojmë</span>
+  <h2 class="proc-ttl">Një proces i thjeshtë, i parashikueshëm</h2>
+  <div id="procRows"></div>
+</section>
+
+<!-- marquee -->
+<section class="mq-sec">
+  <div class="mq-row" id="mq1"></div>
+  <div class="mq-row" id="mq2"></div>
+</section>
+
+<!-- paketat -->
+<section class="price">
+  <span class="ey">Paketat</span>
+  <div class="price-grid">
+    <div>
+      <h2 class="price-ttl">Çmime të qarta, pa surpriza</h2>
+      <p class="price-note">Tri paketa kontabiliteti të përshtatura me ritmin e biznesit tuaj — nga regjistrime gjashtëmujore deri te mbështetje e plotë mujore. Tarifa përcaktohet sipas vëllimit dhe nevojave.</p>
+    </div>
+    <div>
+      <div class="tier"><span class="tier-n"><i>01</i>Start</span><span class="tier-p">15.000 – 45.000 Lekë/muaj</span></div>
+      <div class="tier"><span class="tier-n"><i>02</i>Standart<span class="tier-tag">Më e zgjedhura</span></span><span class="tier-p">50.000 – 80.000 Lekë/muaj</span></div>
+      <div class="tier"><span class="tier-n"><i>03</i>Premium</span><span class="tier-p">mbi 80.000 Lekë/muaj</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- finalja -->
+<section class="finale">
+  <span class="ey">Kontakt</span>
+  <h2 class="fin-ttl">Le të flasim për <em>numrat</em> tuaj</h2>
+  <p class="fin-lead">Na shkruani për një konsultë fillestare pa pagesë. Ju përgjigjemi brenda një dite pune.</p>
+  <div class="fin-cta">
+    <a class="btn btn-orange" href="index.html" onclick="goSite('contact')">Cakto një takim <span class="arr">↗</span></a>
+    <a class="btn btn-ghost" href="tel:+355696052163">+355 69 60 52 163</a>
+  </div>
+  <div class="fin-details">
+    <div><div class="fin-k">Email</div><div class="fin-v">info@tufa.consulting</div></div>
+    <div><div class="fin-k">Telefon</div><div class="fin-v">+355 69 60 52 163</div></div>
+    <div><div class="fin-k">Adresa</div><div class="fin-v">Rr. Bardhok Biba, Tiranë</div></div>
+    <div><div class="fin-k">Orari</div><div class="fin-v">Hën–Pre, 09:00–17:00</div></div>
+  </div>
+  <div class="foot">
+    <span>© 2026 TUFA Consult. Të gjitha të drejtat e rezervuara.</span>
+    <a href="index.html" onclick="goSite('services')">tufa.consulting ↗</a>
+  </div>
+</section>
+
+<script>
+sessionStorage.setItem("tufa_seen","1");
+/* hap një faqe të webfaqes (SPA lexon localStorage) */
+function goSite(p){try{localStorage.setItem("tufa_page",p);localStorage.removeItem("tufa_arg")}catch(e){}}
+window.goSite=goSite;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const smooth=(a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t)};
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+window.__hero=0;
+let intro=0;
+
+/* preloader */
+const pre=document.getElementById('pre');
+if(reduced){pre.remove()}else{
+  document.body.style.overflow='hidden';scrollTo(0,0);
+  const n=document.getElementById('preN'),t0=performance.now();
+  (function tick(t){const p=clamp((t-t0)/850,0,1);n.textContent=String(Math.round(p*100)).padStart(2,'0');
+    if(p<1)requestAnimationFrame(tick);else{pre.classList.add('out');document.body.style.overflow='';
+      const i0=performance.now();(function up(t2){intro=clamp((t2-i0)/900,0,1);if(intro<1)requestAnimationFrame(up)})(i0);
+      setTimeout(()=>pre.remove(),800)}})(t0);
+}
+
+/* content */
+const SERVICES=[
+  ["01","Shërbime Financiare & Kontabilitet","Mbajtja e plotë e kontabilitetit, regjistrimi i transaksioneve dhe raportimi periodik financiar."],
+  ["02","Programe Fiskale & Kontabël","Konfigurim dhe administrim i programeve fiskale e kontabël, në përputhje me legjislacionin në fuqi."],
+  ["03","Mbyllje Bilancesh & Pasqyra","Përgatitja dhe mbyllja e bilanceve vjetore e pasqyrave financiare, të sakta dhe në afat."],
+  ["04","Konsulencë Fiskale","Këshillim për detyrimet tatimore, deklarimet dhe optimizimin fiskal të biznesit."],
+  ["05","Mbështetje për Biznese","Suport i vazhdueshëm për çdo nevojë të biznesit në fushën financiare dhe kontabël."],
+  ["06","Raportim & Analizë","Raporte të qarta menaxheriale që e kthejnë informacionin financiar në vendime."]];
+document.getElementById('track').innerHTML=SERVICES.map(s=>
+  `<div class="svc"><span class="svc-n">${s[0]}</span><h3 class="svc-t">${s[1]}</h3><p class="svc-d">${s[2]}</p></div>`).join('')
+  +`<div class="svc-end"><a class="btn btn-ghost" href="index.html" onclick="goSite('services')">Të gjitha shërbimet <span class="arr">↗</span></a></div>`;
+
+const PROCESS=[
+  ["01","Njohja","Kuptojmë biznesin, strukturën dhe nevojat tuaja financiare."],
+  ["02","Konfigurimi","Vendosim sistemin kontabël e fiskal të përshtatur me biznesin."],
+  ["03","Mbajtja","Regjistrojmë e administrojmë çdo transaksion me saktësi."],
+  ["04","Raportimi","Bilancet, pasqyrat dhe raportet — gjithmonë në afat."]];
+document.getElementById('procRows').innerHTML=PROCESS.map(p=>
+  `<div class="proc-row"><span class="proc-k">${p[0]}</span><h3 class="proc-t">${p[1]}</h3><p class="proc-d">${p[2]}</p></div>`).join('');
+
+const MQ=["Kontabilitet","Fiskalitet","Bilance","Raportim","Konsulencë","TVSH","Pasqyra","Deklarime"];
+for(const [id,cls] of [['mq1',''],['mq2','o']]){
+  document.getElementById(id).innerHTML=Array(2).fill(MQ.map(w=>`<span class="mq-item ${cls}">${w}<span class="mq-dot">↗</span></span>`).join('')).join('');
+}
+const wordsEl=document.getElementById('words');
+wordsEl.innerHTML=wordsEl.dataset.text.split(' ').map(w=>`<span>${w}</span>`).join(' ');
+const wordSpans=[...wordsEl.querySelectorAll('span')];
+
+/* scroll engine */
+const prog=el=>{const t=el.offsetHeight-innerHeight;return t<=0?1:clamp(-el.getBoundingClientRect().top/t,0,1)};
+const aHero=document.getElementById('aHero'),aWords=document.getElementById('aWords'),aServ=document.getElementById('aServ');
+const ph1=document.getElementById('ph1'),ph2=document.getElementById('ph2'),ph3=document.getElementById('ph3');
+const hint=document.getElementById('hint'),track=document.getElementById('track');
+const servCount=document.getElementById('servCount'),bar=document.getElementById('bar');
+const mq1=document.getElementById('mq1'),mq2=document.getElementById('mq2');
+
+function setPhase(el,o,dy){el.style.opacity=o;el.style.transform=`translateY(${dy}px)`}
+function frame(){
+  const doc=document.documentElement;
+  bar.style.width=(100*doc.scrollTop/(doc.scrollHeight-innerHeight))+'%';
+  if(!reduced){
+    const p=prog(aHero); window.__hero=p;
+    /* phase copy: in/out windows over the 520vh scrub */
+    const o1=intro*(1-smooth(.16,.23,p));
+    setPhase(ph1,o1,(1-o1)*0 - smooth(.16,.23,p)*40);
+    const o2=smooth(.30,.37,p)*(1-smooth(.50,.57,p));
+    setPhase(ph2,o2,(1-smooth(.30,.37,p))*40 - smooth(.50,.57,p)*40);
+    const o3=smooth(.66,.74,p);
+    setPhase(ph3,o3,(1-o3)*44);
+    ph3.classList.toggle('live',o3>.6);
+    hint.style.opacity=p<.03?1:0;
+    /* words */
+    const pw=prog(aWords);
+    const n=Math.floor(clamp(pw/.8,0,1)*wordSpans.length);
+    wordSpans.forEach((s,i)=>s.classList.toggle('on',i<n));
+    document.getElementById('wordsCta').classList.toggle('on',pw>.85);
+    /* services */
+    const ps=prog(aServ);
+    const padL=parseFloat(getComputedStyle(track).paddingLeft)||0;
+    const max=track.scrollWidth-innerWidth+padL;
+    track.style.transform=`translateX(${-ps*Math.max(0,max)}px)`;
+    servCount.textContent=String(1+Math.round(ps*5)).padStart(2,'0')+' / 06';
+    /* marquee */
+    const y=doc.scrollTop;
+    const w1=mq1.scrollWidth/2||600,w2=mq2.scrollWidth/2||600;
+    mq1.style.transform=`translateX(${-(y*.06)%w1}px)`;
+    mq2.style.transform=`translateX(${(y*.045)%w2-w2}px)`;
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* count-up + reveals */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target,end=+el.dataset.count,t0=performance.now();
+  (function tick(t){const p=clamp((t-t0)/900,0,1);el.textContent=Math.round(end*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(tick)})(t0);
+  io.unobserve(el);
+}),{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
+const io2=new IntersectionObserver(es=>es.forEach((e,i)=>{
+  if(e.isIntersecting){e.target.classList.add('on');io2.unobserve(e.target)}
+}),{threshold:.25});
+document.querySelectorAll('.proc-row').forEach(el=>io2.observe(el));
+</script>
+
+<script type="module">
+/* AKTI I në 3D: stuhi dokumentesh → logoja TUFA */
+import * as THREE from 'three';
+const cv=document.getElementById('gl');
+try{
+  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(38,1,.01,100);
+  scene.add(new THREE.HemisphereLight(0xffffff,0x2a2a2a,1.0));
+  const key=new THREE.DirectionalLight(0xffffff,2.0);key.position.set(4,7,5);scene.add(key);
+  const rim=new THREE.DirectionalLight(0xff9d3b,.9);rim.position.set(-5,2,-4);scene.add(rim);
+
+  /* stuhia: fletë të instancuara */
+  const N=innerWidth<700?220:420;
+  const pGeo=new THREE.BoxGeometry(.15,.21,.004);
+  const pMat=new THREE.MeshStandardMaterial({roughness:.75,metalness:.02});
+  const inst=new THREE.InstancedMesh(pGeo,pMat,N);
+  inst.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  const A=[],B=[],rot=[],stag=[],dum=new THREE.Object3D();
+  const colTmp=new THREE.Color();
+  for(let i=0;i<N;i++){
+    const r=2.1+Math.random()*2.6, th=Math.random()*Math.PI*2, ph=(Math.random()-.5)*Math.PI*.85;
+    A.push(new THREE.Vector3(Math.cos(th)*Math.cos(ph)*r*1.45,Math.sin(ph)*r*.72,Math.sin(th)*Math.cos(ph)*r));
+    B.push(new THREE.Vector3((Math.random()-.5)*2.5,Math.random()*.62,(Math.random()-.5)*.4));
+    rot.push([Math.random()*6.28,Math.random()*6.28,Math.random()*6.28,(.3+Math.random())* (Math.random()<.5?1:-1)]);
+    stag.push(Math.random());
+    const u=Math.random();
+    inst.setColorAt(i,colTmp.set(u<.12?0xff9d3b:u<.2?0x8f8b84:0xf5f2ec));
+  }
+  scene.add(inst);
+
+  /* logoja */
+  const mWhite=new THREE.MeshStandardMaterial({color:0xf5f2ec,roughness:.32,metalness:.05});
+  const mOrange=new THREE.MeshStandardMaterial({color:0xff9d3b,roughness:.35,metalness:.25});
+  const mDark=new THREE.MeshStandardMaterial({color:0x363636,roughness:.55,metalness:.08});
+  const mBlack=new THREE.MeshStandardMaterial({color:0x202020,roughness:.6,metalness:.05});
+  const logo=new THREE.Group();
+  const t=.155;
+  const poly=pts=>new THREE.Shape(pts.map(p=>new THREE.Vector2(p[0],p[1])));
+  const sT=poly([[0,1],[.82,1],[.82,.845],[.4875,.845],[.4875,0],[.3325,0],[.3325,.845],[0,.845]]);
+  const sU=new THREE.Shape();
+  sU.moveTo(0,1);sU.lineTo(0,.4);sU.absarc(.4,.4,.4,Math.PI,0,false);
+  sU.lineTo(.8,1);sU.lineTo(.645,1);sU.lineTo(.645,.4);
+  sU.absarc(.4,.4,.245,0,Math.PI,true);sU.lineTo(.155,1);sU.closePath();
+  const sF=poly([[0,0],[0,1],[.72,1],[.72,.845],[.155,.845],[.155,.575],[.62,.575],[.62,.42],[.155,.42],[.155,0]]);
+  const sA=poly([[0,0],[.4,1],[.52,1],[.92,0],[.75,0],[.646,.26],[.274,.26],[.17,0]]);
+  sA.holes.push(new THREE.Path([[.336,.415],[.584,.415],[.46,.725]].map(p=>new THREE.Vector2(p[0],p[1]))));
+  const extr={depth:.34,bevelEnabled:true,bevelThickness:.02,bevelSize:.016,bevelSegments:2,curveSegments:32};
+  const grp=new THREE.Group();
+  for(const [sh,x] of [[sT,0],[sU,.96],[sF,1.9],[sA,2.7]]){
+    const g=new THREE.ExtrudeGeometry(sh,extr);
+    g.computeBoundingBox();g.translate(x,0,-(g.boundingBox.min.z+g.boundingBox.max.z)/2);
+    grp.add(new THREE.Mesh(g,mWhite));
+  }
+  grp.scale.setScalar(.5);grp.position.set(-3.62/2*.5-.2,.146,0);
+  logo.add(grp);
+  const slab=(w,h,d,cy,m)=>{const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);b.position.y=cy;return b};
+  logo.add(slab(2.68,.06,.66,.03,mBlack));
+  logo.add(slab(2.56,.016,.54,.066,mOrange));
+  logo.add(slab(2.5,.07,.48,.107,mDark));
+  [[0.78,.2],[0.945,.34],[1.11,.52]].forEach(([x,h])=>{
+    const b=new THREE.Mesh(new THREE.BoxGeometry(.12,h,.14),mOrange);
+    b.position.set(x+.06,.138+h/2,0);logo.add(b);
+  });
+  logo.position.y=-.34;
+  scene.add(logo);
+
+  const fit=()=>{renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()};
+  addEventListener('resize',fit);fit();
+
+  const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+  const sm=(a,b,x)=>{const q=clamp((x-a)/(b-a),0,1);return q*q*(3-2*q)};
+  const ease=q=>1-Math.pow(1-q,3);
+  const reduced2=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let rotCur=0;
+
+  renderer.setAnimationLoop(tm=>{
+    const p=reduced2?.8:(window.__hero||0);
+    const asm=sm(.26,.62,p);        // stuhia mblidhet
+    const logoIn=sm(.56,.72,p);     // logoja shfaqet
+    /* fletët */
+    for(let i=0;i<N;i++){
+      const e=ease(clamp(asm*1.45-stag[i]*.45,0,1));
+      const a=A[i],ang=tm*.00012*rot[i][3]+rot[i][0];
+      const bx=Math.cos(ang)*a.x-Math.sin(ang)*a.z, bz=Math.sin(ang)*a.x+Math.cos(ang)*a.z;
+      const by=a.y+Math.sin(tm*.0006+rot[i][1])*.12;
+      dum.position.set(bx+(B[i].x-bx)*e, by+(B[i].y-.34-by)*e, bz+(B[i].z-bz)*e);
+      const spin=(1-e)*tm*.001*rot[i][3];
+      dum.rotation.set(rot[i][0]+spin,rot[i][1]+spin*1.3,rot[i][2]+spin*.7);
+      const s=1-logoIn;
+      dum.scale.set(s,s,s);
+      dum.updateMatrix();
+      inst.setMatrixAt(i,dum.matrix);
+    }
+    inst.instanceMatrix.needsUpdate=true;
+    inst.visible=logoIn<1;
+    /* logoja */
+    logo.visible=logoIn>0;
+    const ls=.55+.45*ease(logoIn);
+    logo.scale.set(ls,ls,ls);
+    const rotT=-.55+sm(.6,1,p)*Math.PI*2;
+    rotCur+=(rotT-rotCur)*.07;
+    logo.rotation.y=rotCur+Math.sin(tm*.0004)*.04;
+    logo.position.y=-.34+(1-ease(logoIn))*-.25+Math.sin(tm*.0007)*.018;
+    /* kamera */
+    const z=5.1-sm(.2,1,p)*1.9, y=.75-sm(.5,1,p)*.45;
+    camera.position.set(Math.sin(tm*.00008)*.25,y,z);
+    camera.lookAt(0,-.02,0);
+    renderer.render(scene,camera);
+  });
+}catch(e){cv.style.display='none';console.warn('WebGL i padisponueshëm',e)}
+</script>
+</body>
+</html>

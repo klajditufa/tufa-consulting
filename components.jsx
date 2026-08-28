@@ -1,78 +1,174 @@
-/* ============== TUFA Consult — header / footer / wordmark ============== */
+/* ============== TUFA Consult — shared components ============== */
+const { useState, useEffect, useRef } = React;
 
-/* ---------- wordmark ---------- */
-.wordmark{display:inline-flex;flex-direction:column;gap:3px;line-height:1}
-.wm-row{display:inline-flex;align-items:center;gap:8px}
-.wm-name{font-family:var(--sans);font-weight:800;font-size:22px;letter-spacing:.02em;color:var(--ink)}
-.wm-sub{font-family:var(--sans);font-weight:400;font-size:22px;letter-spacing:.01em;color:var(--ink)}
-.wm-arrow{color:var(--orange);display:inline-flex;transition:transform .3s var(--ease)}
-.wordmark:hover .wm-arrow{transform:translate(2px,-2px)}
-.wm-tag{font-family:var(--mono);font-size:9px;letter-spacing:.42em;color:var(--muted-2);padding-left:2px}
-
-/* ---------- header ---------- */
-.hdr{position:sticky;top:0;z-index:60;background:rgba(250,248,244,.72);
-  backdrop-filter:saturate(140%) blur(14px);-webkit-backdrop-filter:saturate(140%) blur(14px);
-  transition:box-shadow .3s var(--ease),background .3s var(--ease),border-color .3s;
-  border-bottom:1px solid transparent}
-.hdr.is-scrolled{border-bottom-color:var(--line);background:rgba(250,248,244,.86)}
-.hdr-inner{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:78px;gap:24px}
-
-.nav-desktop{display:flex;align-items:center;justify-content:center;gap:clamp(14px,2.2vw,40px);grid-column:2}
-.navlink{font-size:15px;font-weight:500;color:#4b4943;position:relative;padding:6px 0;white-space:nowrap;
-  transition:color .2s var(--ease)}
-.navlink::after{content:"";position:absolute;left:0;bottom:-2px;height:1.5px;width:0;background:var(--orange);
-  transition:width .28s var(--ease)}
-.navlink:hover{color:var(--ink)}
-.navlink.active{color:var(--ink)}
-.navlink.active::after{width:100%}
-
-.hdr-right{display:flex;align-items:center;gap:16px;justify-self:end;grid-column:3}
-.lang{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
-.lang-btn{font-family:var(--mono);font-size:11px;letter-spacing:.06em;padding:6px 9px;color:var(--muted);
-  transition:background .2s,color .2s}
-.lang-btn.on{background:var(--charcoal);color:#fff}
-.hdr-cta{padding:11px 18px;font-size:14px;white-space:nowrap}
-
-.burger{display:none;width:34px;height:34px;position:relative}
-.burger span{position:absolute;left:7px;right:7px;height:1.6px;background:var(--ink);transition:transform .3s var(--ease),opacity .2s}
-.burger span:nth-child(1){top:13px}
-.burger span:nth-child(2){top:20px}
-.burger.x span:nth-child(1){transform:translateY(3.5px) rotate(45deg)}
-.burger.x span:nth-child(2){transform:translateY(-3.5px) rotate(-45deg)}
-
-.nav-mobile{display:none;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line);
-  overflow:hidden;max-height:0;transition:max-height .4s var(--ease)}
-.nav-mobile.show{max-height:520px}
-.m-link{display:flex;align-items:center;justify-content:space-between;padding:18px var(--pad);
-  font-family:var(--serif);font-size:26px;color:var(--ink);border-top:1px solid var(--line-soft)}
-.m-link.active{color:var(--orange-deep)}
-.m-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px var(--pad) 26px}
-
-/* ---------- footer ---------- */
-.ftr{background:var(--charcoal);color:#e9e6e0}
-.ftr .wrap{padding-top:clamp(56px,7vw,96px);padding-bottom:40px}
-.ftr-top{display:grid;grid-template-columns:1.3fr 1fr;gap:48px}
-.ftr-logo{width:170px;margin-bottom:22px}
-.ftr-blurb{color:#b6b2aa;font-size:15px;line-height:1.6;max-width:46ch}
-.ftr-cols{display:grid;grid-template-columns:1fr 1.2fr;gap:32px}
-.ftr-col{display:flex;flex-direction:column;gap:12px}
-.ftr-h{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:4px}
-.ftr-col a,.ftr-val{color:#cbc7bf;font-size:15px;transition:color .2s}
-.ftr-col a:hover{color:#fff}
-.ftr-rule{height:1px;background:var(--line-dark);border:none;margin:48px 0 22px}
-.ftr-bot{display:flex;justify-content:space-between;align-items:center;color:#8f8b83;font-size:13px}
-.ftr-mono{font-family:var(--mono);letter-spacing:.16em;font-size:11px}
-
-@media (max-width:1040px){
-  .nav-desktop,.hdr-cta{display:none}
-  .burger{display:block}
-  .nav-mobile{display:flex}
+/* language helper: pick sq/en from a {sq,en} pair, pass-through plain strings */
+function tx(v, lang){
+  if (v == null) return "";
+  if (typeof v === "object") return v[lang] ?? v.sq ?? "";
+  return v;
 }
-@media (max-width:900px){
-  .ftr-top{grid-template-columns:1fr;gap:36px}
+
+/* up-right arrow motif (from the logo) */
+function Arrow({ size = 15, cls = "" }){
+  return (
+    <svg className={"arr " + cls} width={size} height={size} viewBox="0 0 16 16" fill="none"
+      style={{ display:"inline-block", flex:"0 0 auto" }}>
+      <path d="M4.5 11.5L11.5 4.5M6 4.5h5.5V10" stroke="currentColor" strokeWidth="1.6"
+        strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
 }
-@media (max-width:560px){
-  .ftr-cols{grid-template-columns:1fr}
-  .ftr-bot{flex-direction:column;gap:8px;align-items:flex-start}
-  .hdr-inner{height:66px}
+
+/* wordmark for light backgrounds */
+function Wordmark({ onClick, mono }){
+  return (
+    <a href="#" onClick={(e)=>{e.preventDefault(); onClick&&onClick();}} className="wordmark" aria-label="TUFA Consult">
+      <span className="wm-row">
+        <span className="wm-name">TUFA</span>
+        <span className="wm-sub">Consult</span>
+        <span className="wm-arrow"><Arrow size={13}/></span>
+      </span>
+      {!mono && <span className="wm-tag">SOLUTIONS</span>}
+    </a>
+  );
 }
+
+/* simple geometric line icons for services */
+function SvcIcon({ name }){
+  const c = { width:26, height:26, viewBox:"0 0 24 24", fill:"none",
+    stroke:"currentColor", strokeWidth:1.4, strokeLinecap:"round", strokeLinejoin:"round" };
+  const P = {
+    ledger: <><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 3v18M11 8h6M11 12h6M11 16h4"/></>,
+    chip:   <><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 9h6v6H9zM10 3v3M14 3v3M10 18v3M14 18v3M3 10h3M3 14h3M18 10h3M18 14h3"/></>,
+    scale:  <><path d="M12 4v16M6 20h12M5 8h14M5 8l-2.5 5a2.5 2.5 0 005 0L5 8zM19 8l-2.5 5a2.5 2.5 0 005 0L19 8z"/></>,
+    doc:    <><path d="M6 3h8l4 4v14H6zM14 3v4h4"/><path d="M9 13h6M9 17h6"/></>,
+    support:<><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M14.1 9.9l3-3M6.9 17.1l3-3M14.1 14.1l3 3M6.9 6.9l3 3"/></>,
+    chart:  <><path d="M4 20V4M4 20h16"/><path d="M8 16l3-4 3 2 4-6"/></>,
+  };
+  return <svg {...c}>{P[name] || P.doc}</svg>;
+}
+
+/* ---------------- Header ---------------- */
+function Header({ page, go, lang, setLang }){
+  const T = window.TUFA;
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(()=>{
+    const f = ()=> setScrolled(window.scrollY > 8);
+    f(); window.addEventListener("scroll", f, { passive:true });
+    return ()=> window.removeEventListener("scroll", f);
+  },[]);
+  useEffect(()=>{ setOpen(false); },[page]);
+
+  return (
+    <header className={"hdr" + (scrolled ? " is-scrolled" : "")}>
+      <div className="hdr-inner wrap">
+        <Wordmark onClick={()=>go("services")} />
+
+        <nav className="nav-desktop">
+          {T.nav.map(n=>(
+            <a key={n.id} href="#"
+               onClick={(e)=>{e.preventDefault(); go(n.id);}}
+               className={"navlink" + ((page===n.id || (page==="article" && n.id==="pubs")) ? " active" : "")}>
+              {tx(n, lang)}
+            </a>
+          ))}
+        </nav>
+
+        <div className="hdr-right">
+          <div className="lang" role="group" aria-label="Language">
+            {["sq","en"].map(l=>(
+              <button key={l} className={"lang-btn"+(lang===l?" on":"")} onClick={()=>setLang(l)}>
+                {l.toUpperCase()}
+              </button>
+            ))}
+          </div>
+          <button className="btn btn-orange hdr-cta" onClick={()=>go("contact")}>
+            {tx(T.ui.cta_contact, lang)} <Arrow/>
+          </button>
+          <button className={"burger"+(open?" x":"")} aria-label="Menu" onClick={()=>setOpen(o=>!o)}>
+            <span></span><span></span>
+          </button>
+        </div>
+      </div>
+
+      <div className={"nav-mobile"+(open?" show":"")}>
+        {T.nav.map(n=>(
+          <a key={n.id} href="#" onClick={(e)=>{e.preventDefault(); go(n.id);}}
+             className={"m-link"+(page===n.id?" active":"")}>
+            {tx(n, lang)} <Arrow size={16}/>
+          </a>
+        ))}
+        <div className="m-foot">
+          <div className="lang">
+            {["sq","en"].map(l=>(
+              <button key={l} className={"lang-btn"+(lang===l?" on":"")} onClick={()=>setLang(l)}>{l.toUpperCase()}</button>
+            ))}
+          </div>
+          <button className="btn btn-orange" onClick={()=>go("contact")}>{tx(T.ui.cta_contact,lang)} <Arrow/></button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/* ---------------- Footer ---------------- */
+function Footer({ go, lang }){
+  const T = window.TUFA;
+  return (
+    <footer className="ftr">
+      <div className="wrap">
+        <div className="ftr-top">
+          <div className="ftr-brand">
+            <img src="assets/logo-dark.png" alt="TUFA Consult" className="ftr-logo"/>
+            <p className="ftr-blurb">{tx(T.intro.body, lang)}</p>
+          </div>
+          <div className="ftr-cols">
+            <div className="ftr-col">
+              <span className="ftr-h">{lang==="sq"?"Faqet":"Pages"}</span>
+              {T.nav.map(n=>(
+                <a key={n.id} href="#" onClick={(e)=>{e.preventDefault(); go(n.id);}}>{tx(n,lang)}</a>
+              ))}
+            </div>
+            <div className="ftr-col">
+              <span className="ftr-h">{lang==="sq"?"Kontakt":"Contact"}</span>
+              {T.contact.details.map((d,i)=>(
+                <span key={i} className="ftr-val">{tx(d.v, lang)}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <hr className="ftr-rule"/>
+        <div className="ftr-bot">
+          <span>© {new Date().getFullYear()} TUFA Consult. {tx(T.ui.rights, lang)}</span>
+          <span className="ftr-mono">TIRANË · SHQIPËRI</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* scroll-reveal wrapper — fades/rises in when it enters the viewport */
+function Reveal({ children, delay=0, className="", as="div" }){
+  const Tag = as;
+  const ref = useRef(null);
+  useEffect(()=>{
+    const el = ref.current; if(!el) return;
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches){ el.classList.add("in"); return; }
+    const io = new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        if(e.isIntersecting){
+          el.style.transitionDelay = delay + "ms";
+          el.classList.add("in");
+          el.addEventListener("transitionend", ()=>{ el.style.transitionDelay = ""; }, { once:true });
+          io.unobserve(el);
+        }
+      });
+    }, { threshold:.12, rootMargin:"0px 0px -7% 0px" });
+    io.observe(el);
+    return ()=> io.disconnect();
+  },[]);
+  return <Tag ref={ref} className={"reveal io " + className}>{children}</Tag>;
+}
+
+Object.assign(window, { tx, Arrow, Wordmark, SvcIcon, Header, Footer, Reveal });

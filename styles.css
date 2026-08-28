@@ -117,6 +117,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 /* ---------- hairlines ---------- */
 .rule{height:1px;background:var(--line);border:none;width:100%}
 
-/* ---------- reveal (visible by default; subtle motion only where supported) ---------- */
-.reveal{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){ *{scroll-behavior:auto} }
+/* ---------- reveal & motion ---------- */
+@keyframes riseIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.reveal{animation:riseIn .85s var(--ease) both}
+.reveal.io{animation:none;opacity:0;transform:translateY(26px);
+  transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.reveal.io.in{opacity:1;transform:none}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.page-enter{animation:pageIn .5s var(--ease) both}
+@media (prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto}
+  .reveal,.page-enter{animation:none}
+  .reveal.io{opacity:1;transform:none;transition:none}
+}
