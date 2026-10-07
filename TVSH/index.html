@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Si llogaritet TVSH-ja — TUFA Consult</title>
+<meta name="description" content="Shpjegim i thjeshtë dhe interaktiv: pse nga 600,000 lekë xhiro 100,000 lekë janë TVSH, dhe si e ulin blerjet me faturë TVSH-në që paguani."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500&family=Hanken+Grotesk:wght@400;600&display=swap" rel="stylesheet"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MKM8VG9QTZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MKM8VG9QTZ');
+</script>
+<style>
+:root{
+  --ink:#1d1d1d; --charcoal:#363636; --bg:#faf8f4; --card:#ffffff; --muted:#73706a; --line:rgba(54,54,54,.14);
+  --net:#2f7d6b; --net-bg:#dcefe9; --vat:#f08410; --vat-bg:#ffe9d2; --vat-text:#a8560a; --buy:#3f6fb0; --buy-bg:#dfe8f5;
+  --serif:'Newsreader',Georgia,serif; --sans:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;padding:0 16px}
+.top{max-width:760px;margin:0 auto;padding-block:20px;display:flex;justify-content:space-between;align-items:center}
+.top a{color:var(--charcoal);text-decoration:none}
+.brand{font-family:var(--serif);font-size:22px}
+.brand span{color:var(--vat)}
+.back{font-size:14px;color:var(--muted)!important}
+main{max-width:760px;margin:0 auto;padding-block:16px 56px;display:flex;flex-direction:column;gap:28px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(28px,6vw,42px);line-height:1.15;margin:6px 0 0;text-wrap:balance}
+h2{font-family:var(--serif);font-weight:500;font-size:23px;margin:0 0 12px;text-wrap:balance}
+p{margin:0}
+.lead{color:var(--muted);max-width:62ch;margin-top:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.num{font-variant-numeric:tabular-nums}
+.bar{display:flex;height:76px;border-radius:10px;overflow:hidden}
+.seg{display:flex;flex-direction:column;justify-content:center;padding:0 14px;min-width:0}
+.seg b{font-weight:600;font-size:18px}
+.seg span{font-size:13px}
+.net{flex:5;background:var(--net-bg);color:var(--net)}
+.vat{flex:1;background:var(--vat-bg);color:var(--vat-text);padding:0 10px}
+.formula{font-size:14px;color:var(--muted);margin-top:10px}
+.slider-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+input[type=range]{flex:1 1 220px;accent-color:var(--vat);height:28px;touch-action:pan-y}
+.out{font-size:18px;font-weight:600;min-width:130px;text-align:right}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.presets button{font:inherit;font-size:14px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.presets button:hover{border-color:var(--vat)}
+.presets button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--vat);outline-offset:2px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:20px}
+.tile{border-radius:10px;padding:14px 16px;background:var(--bg)}
+.tile p:first-child{font-size:14px;color:var(--muted)}
+.tile p:last-child{font-size:26px;font-weight:600}
+.tile.pay{background:var(--vat-bg)}
+.tile.pay p{color:var(--vat-text)}
+.rows{display:flex;flex-direction:column;gap:10px;margin-top:22px;font-size:14px}
+.row{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:10px}
+.track{background:var(--bg);border-radius:6px;height:24px;overflow:hidden}
+.fill{height:100%;border-radius:6px;transition:width .2s}
+.msg{margin-top:18px;color:var(--muted)}
+ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.cta{background:var(--charcoal);color:#fff;border-radius:14px;padding:22px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.cta p{max-width:46ch}
+.cta a{background:var(--vat);color:#1d1d1d;text-decoration:none;font-weight:600;padding:10px 18px;border-radius:999px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+<div class="top">
+  <a class="brand" href="/">TUFA <span>Consult</span></a>
+  <a class="back" href="/">← Kthehu te faqja</a>
+</div>
+<main>
+  <header>
+    <p class="eyebrow">Udhëzues TVSH · TUFA Consult</p>
+    <h1>Pse nga 600,000 lekë xhiro, 100,000 lekë i takojnë shtetit</h1>
+    <p class="lead">Çmimi që merrni nga klientët e përfshin TVSH-në 20%. Nga çdo 120 lekë që arkëtoni, 100 janë të ardhurat tuaja dhe 20 janë TVSH që e mblidhni për shtetin.</p>
+  </header>
+
+  <section class="card">
+    <h2>Si ndahet xhiroja mujore</h2>
+    <div class="bar num" role="img" aria-label="600,000 lekë ndahen në 500,000 të ardhura dhe 100,000 TVSH">
+      <div class="seg net"><b>500,000 lekë</b><span>Të ardhurat e biznesit</span></div>
+      <div class="seg vat"><b>100,000</b><span>TVSH 20%</span></div>
+    </div>
+    <p class="formula num">600,000 ÷ 1.2 = 500,000 &nbsp;·&nbsp; 500,000 × 20% = 100,000</p>
+  </section>
+
+  <section class="card">
+    <h2>Blerjet me faturë e ulin TVSH-në që paguani</h2>
+    <p style="color:var(--muted);margin-bottom:16px">Lëvizni rrëshqitësin për të parë sa paguani sipas blerjeve mujore (me TVSH).</p>
+    <div class="slider-row">
+      <input type="range" id="blerje" min="0" max="600000" step="10000" value="0" aria-label="Blerjet mujore me faturë tatimore">
+      <span class="out num" id="blerje-out">0 lekë</span>
+    </div>
+    <div class="presets">
+      <button type="button" data-v="0">Pa blerje</button>
+      <button type="button" data-v="120000">120,000</button>
+      <button type="button" data-v="300000">300,000</button>
+      <button type="button" data-v="480000">480,000</button>
+    </div>
+    <div class="tiles num">
+      <div class="tile"><p>TVSH e shitjeve</p><p>100,000</p></div>
+      <div class="tile"><p>− TVSH e blerjeve</p><p id="t-blerje">0</p></div>
+      <div class="tile pay"><p>= I paguhet shtetit</p><p id="t-paguan">100,000</p></div>
+    </div>
+    <div class="rows">
+      <div class="row"><span>TVSH shitje</span><div class="track"><div class="fill" style="width:100%;background:var(--vat);opacity:.4"></div></div></div>
+      <div class="row"><span>TVSH blerje</span><div class="track"><div class="fill" id="f-blerje" style="width:0%;background:var(--buy)"></div></div></div>
+      <div class="row"><span>Për shtetin</span><div class="track"><div class="fill" id="f-paguan" style="width:100%;background:var(--vat)"></div></div></div>
+    </div>
+    <p class="msg" id="msg">Pa asnjë blerje, e gjithë TVSH-ja e mbledhur nga klientët (100,000 lekë) shkon te shteti.</p>
+  </section>
+
+  <section class="card">
+    <h2>Çfarë duhet të mbani parasysh</h2>
+    <ul>
+      <li>TVSH për t'u paguar = TVSH e shitjeve − TVSH e blerjeve.</li>
+      <li>Zbritet vetëm TVSH-ja e blerjeve me faturë tatimore të fiskalizuar, në emër të biznesit, nga furnitorë në regjimin e TVSH-së.</li>
+      <li>Blerjet pa faturë nuk e ulin TVSH-në që paguani.</li>
+      <li>Deklarata dhe pagesa e TVSH-së bëhen çdo muaj, deri më 14 të muajit pasardhës.</li>
+    </ul>
+  </section>
+
+  <section class="cta">
+    <p>Keni pyetje për TVSH-në e biznesit tuaj? Na kontaktoni dhe e shohim bashkë.</p>
+    <a href="/">Kontakto TUFA Consult</a>
+  </section>
+
+  <footer>Shembull ilustrues me normën standarde 20%. Për rastin tuaj konkret, konsultohuni me kontabilistin. · TUFA Consult, tufa.consulting</footer>
+</main>
+<script>
+(function(){
+  var fmt=function(n){return Math.round(n).toLocaleString('en-US');};
+  var s=document.getElementById('blerje');
+  function update(){
+    var v=Number(s.value), t=v/6, p=100000-t;
+    document.getElementById('blerje-out').textContent=fmt(v)+' lekë';
+    document.getElementById('t-blerje').textContent=fmt(t);
+    document.getElementById('t-paguan').textContent=fmt(p);
+    document.getElementById('f-blerje').style.width=(t/1000)+'%';
+    document.getElementById('f-paguan').style.width=(p/1000)+'%';
+    document.getElementById('msg').textContent = v===0
+      ? 'Pa asnjë blerje, e gjithë TVSH-ja e mbledhur nga klientët (100,000 lekë) shkon te shteti.'
+      : 'Me '+fmt(v)+' lekë blerje me faturë, zbritet TVSH '+fmt(t)+' lekë, kështu që shtetit i paguhen vetëm '+fmt(p)+' lekë.';
+  }
+  s.addEventListener('input',update);
+  s.addEventListener('change',update);
+  document.querySelectorAll('.presets button').forEach(function(b){
+    b.addEventListener('click',function(){s.value=b.getAttribute('data-v');update();});
+  });
+  update();
+})();
+</script>
+</body>
+</html>
